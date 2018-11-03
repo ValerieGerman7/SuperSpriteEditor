@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="drhenrykillinger">images/drhenrykillingerandmagicmurderbag.png</file>
+        <file alias="background">images/background.png</file>
+    </qresource>
+</RCC>

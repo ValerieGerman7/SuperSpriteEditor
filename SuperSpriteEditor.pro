@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    animationpreviewwindow.cpp
+    animationpreviewwindow.cpp \
+    rendercanvas.cpp
 
 HEADERS += \
         mainwindow.h \
-    animationpreviewwindow.h
+    animationpreviewwindow.h \
+    rendercanvas.h
 
 FORMS += \
         mainwindow.ui \
@@ -41,3 +43,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc
