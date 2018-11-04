@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/**
+ * @brief RenderCanvas
+ * Qt constructor
+ */
 RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
 	pixmap.load("://drhenrykillinger");
@@ -13,6 +17,11 @@ RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
 }
 
+/**
+ * @brief paintEvent
+ * Qt method called whenever a paint event occurs
+ * @param event
+ */
 void RenderCanvas::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
 
@@ -21,47 +30,14 @@ void RenderCanvas::paintEvent(QPaintEvent *event) {
 	paintImage();
 }
 
-void RenderCanvas::paintBackground() {
-	QPainter painter(this);
-
-	QSize canvasSize = this->size();
-
-	QSize backgroundSize = transparentBackground.size();
-
-	for( int x = 0; x < canvasSize.width(); x += backgroundSize.width() ) {
-		for( int y = 0; y < canvasSize.height(); y += backgroundSize.height() ) {
-			painter.drawPixmap(x,y,transparentBackground);
-		}
-	}
-}
-
-void RenderCanvas::paintImage() {
-	QPainter painter(this);
-
-	QSize scaledSize = getScaledImageSize();
-
-	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), pixmap);
-}
-
-int RenderCanvas::scaledInt(int value) {
-	return floor( (float)value * scale );
-}
-
-int RenderCanvas::scaledInt(int value, float scale) {
-	return floor( (float)value * scale );
-}
-
-QSize RenderCanvas::getScaledImageSize() {
-	int newWidth = scaledInt(pixmap.width());
-	int newHeight = scaledInt(pixmap.height());
-	return QSize(newWidth, newHeight);
-}
-
-QRect RenderCanvas::getImageBounds() {
-	QSize size = getScaledImageSize();
-	return QRect( translation.x(), translation.y(), size.width(), size.height() );
-}
-
+/**
+ * @brief canvasPointToImagePoint
+ * Converts a position in the canvas into a pixel position in the current frame.
+ * Ensures that the position is actually within the current frame.
+ * Takes a canvas point and a reference to a QPoint where the result pixel position
+ * should be returned into.
+ * @return true if the position is within the bounds of the current frame, false otherwise
+ */
 bool RenderCanvas::canvasPointToImagePoint(QPoint canvasPoint, QPoint& imagePoint) {
 	QRect imageRect = getImageBounds();
 
@@ -76,6 +52,81 @@ bool RenderCanvas::canvasPointToImagePoint(QPoint canvasPoint, QPoint& imagePoin
 	}
 }
 
+/**
+ * @brief getImageBounds
+ * Returns the screen rectangle where the current image will be drawn within the canvas area.
+ * Uses the current translation and scale.
+ * @return
+ */
+QRect RenderCanvas::getImageBounds() {
+	QSize size = getScaledImageSize();
+	return QRect( translation.x(), translation.y(), size.width(), size.height() );
+}
+
+
+/**
+ * @brief paintBackground
+ * Draws the checkered workspace background across the entire canvas
+ */
+void RenderCanvas::paintBackground() {
+	QPainter painter(this);
+
+	QSize canvasSize = this->size();
+
+	QSize backgroundSize = transparentBackground.size();
+
+	for( int x = 0; x < canvasSize.width(); x += backgroundSize.width() ) {
+		for( int y = 0; y < canvasSize.height(); y += backgroundSize.height() ) {
+			painter.drawPixmap(x,y,transparentBackground);
+		}
+	}
+}
+
+/**
+ * @brief paintImage
+ * Draws the current frame being edited using the current scale and translation
+ */
+void RenderCanvas::paintImage() {
+	QPainter painter(this);
+
+	QSize scaledSize = getScaledImageSize();
+
+	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), pixmap);
+}
+
+/**
+ * @brief getScaledImageSize
+ * @return Calculates and returns the current frames size in pixels scaled by the current scale
+ */
+QSize RenderCanvas::getScaledImageSize() {
+	int newWidth = scaledInt(pixmap.width());
+	int newHeight = scaledInt(pixmap.height());
+	return QSize(newWidth, newHeight);
+}
+
+/**
+ * @brief scaledInt
+ * @return Scales a int by the current scale.
+ * Just to ensure that float math is used consistently.
+ */
+int RenderCanvas::scaledInt(int value) {
+	return floor( (float)value * scale );
+}
+
+/**
+ * @brief scaledInt
+ * @return Scales a int by the given scalar.
+ * Just to ensure that float math is used consistently.
+ */
+int RenderCanvas::scaledInt(int value, float scale) {
+	return floor( (float)value * scale );
+}
+
+/**
+ * @brief mousePressEvent
+ * Qt method called whenever a mouse pressed event occurs
+ * @param event
+ */
 void RenderCanvas::mousePressEvent(QMouseEvent *event) {
 	if (event->button()==Qt::LeftButton){
 		drawing = true;
@@ -87,6 +138,11 @@ void RenderCanvas::mousePressEvent(QMouseEvent *event) {
 	}
 }
 
+/**
+ * @brief mousePressEvent
+ * Qt method called whenever a mouse released event occurs
+ * @param event
+ */
 void RenderCanvas::mouseReleaseEvent(QMouseEvent *event) {
 	if (event->button()==Qt::LeftButton){
 		drawing = false;
@@ -96,6 +152,11 @@ void RenderCanvas::mouseReleaseEvent(QMouseEvent *event) {
 	}
 }
 
+/**
+ * @brief mousePressEvent
+ * Qt method called whenever a mouse move event occurs
+ * @param event
+ */
 void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 	if ( translating ) {
 		translation = startTranslationPosition + event->pos() - mouseStartTranslationPosition;
@@ -117,14 +178,21 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 	}
 }
 
+/**
+ * @brief mousePressEvent
+ * Qt method called whenever a scroll wheel event occurs
+ * @param event
+ */
 void RenderCanvas::wheelEvent(QWheelEvent *event) {
 	QSize oldScaledSize = getScaledImageSize();
 
 	scale = scale + event->angleDelta().y() * scaleScrollSpeed;
-	if ( scale < .1f ) {
-		scale = .1f;
-	} else if (scale > 10) {
-		scale = 10;
+
+	// Clamp the scale
+	if ( scale < minScale ) {
+		scale = minScale;
+	} else if (scale > maxScale) {
+		scale = maxScale;
 	}
 
 	// translate the image so that it appears to pivot around the center of the image
@@ -132,7 +200,6 @@ void RenderCanvas::wheelEvent(QWheelEvent *event) {
 	translation.setX( translation.x() - ((float)newScaledSize.width() - (float)oldScaledSize.width()) * 0.5f);
 
 	translation.setY( translation.y() - ((float)newScaledSize.height() - (float)oldScaledSize.height()) * 0.5f);
-
 
 	repaint();
 }
