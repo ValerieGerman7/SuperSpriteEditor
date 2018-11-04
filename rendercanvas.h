@@ -1,6 +1,8 @@
 #ifndef RENDERCANVAS_H
 #define RENDERCANVAS_H
 
+#include "spriteframe.h"
+
 #include <QWidget>
 #include <QPainter>
 
@@ -47,7 +49,11 @@ private:
 // Private members
 private:
 
-	QPixmap pixmap;
+	/**
+	 * @brief frame
+	 * Temp member that should be replaced by a reference to the currently displayed frame within the model.
+	 */
+	SpriteFrame frame;
 
 	/**
 	 * @brief transparentBackground
@@ -104,9 +110,11 @@ public:
 // Private Methods
 private:
 
-	void paintBackground();
+	SpriteFrame& currentFrame();
 
-	void paintImage();
+	void paintBackground(QPainter&);
+
+	void paintImage(QPainter&);
 
 	QSize getScaledImageSize();
 
@@ -116,8 +124,10 @@ private:
 
 
 //Qt override methods
-protected:
+public:
 	explicit RenderCanvas(QWidget *parent = nullptr);
+
+protected:
 
 	void paintEvent(QPaintEvent *event) override;
 

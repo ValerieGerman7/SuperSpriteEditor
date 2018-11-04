@@ -12,7 +12,7 @@ using namespace std;
  */
 RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
-	pixmap.load("://drhenrykillinger");
+	currentFrame().load("://drhenrykillinger");
 	transparentBackground.load("://background");
 
 }
@@ -22,12 +22,23 @@ RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
  * Qt method called whenever a paint event occurs
  * @param event
  */
-void RenderCanvas::paintEvent(QPaintEvent *event) {
+void RenderCanvas::paintEvent(QPaintEvent */*event*/) {
 	QPainter painter(this);
 
-	paintBackground();
+	paintBackground(painter);
 
-	paintImage();
+	paintImage(painter);
+}
+
+/**
+ * @brief RenderCanvas::currentFrame
+ * Used to route references of the current frame through one spot,
+ * where we could set it to something for testing.
+ * @return
+ */
+SpriteFrame& RenderCanvas::currentFrame() {
+	// Temp member that should be replaced by a reference to the currently displayed frame within the model.
+	return frame;
 }
 
 /**
@@ -42,10 +53,14 @@ bool RenderCanvas::canvasPointToImagePoint(QPoint canvasPoint, QPoint& imagePoin
 	QRect imageRect = getImageBounds();
 
 	if ( imageRect.contains(canvasPoint) ) {
-		int x = ((float)canvasPoint.x() - (float)imageRect.x()) / (float)imageRect.width() * (float)pixmap.width();
-		int y = ((float)canvasPoint.y() - (float)imageRect.y()) / (float)imageRect.height() * (float)pixmap.height();
-		imagePoint.setX(x);
-		imagePoint.setY(y);
+		float x = static_cast<float>(canvasPoint.x()) - static_cast<float>(imageRect.x());
+		x /= static_cast<float>(imageRect.width());
+		x *= currentFrame().width();
+		float y = static_cast<float>(canvasPoint.y()) - static_cast<float>(imageRect.y());
+		y /= static_cast<float>(imageRect.height());
+		y *= currentFrame().height();
+		imagePoint.setX(static_cast<int>(x));
+		imagePoint.setY(static_cast<int>(y));
 		return true;
 	} else {
 		return false;
@@ -68,8 +83,7 @@ QRect RenderCanvas::getImageBounds() {
  * @brief paintBackground
  * Draws the checkered workspace background across the entire canvas
  */
-void RenderCanvas::paintBackground() {
-	QPainter painter(this);
+void RenderCanvas::paintBackground(QPainter& painter) {
 
 	QSize canvasSize = this->size();
 
@@ -86,12 +100,11 @@ void RenderCanvas::paintBackground() {
  * @brief paintImage
  * Draws the current frame being edited using the current scale and translation
  */
-void RenderCanvas::paintImage() {
-	QPainter painter(this);
+void RenderCanvas::paintImage(QPainter& painter) {
 
 	QSize scaledSize = getScaledImageSize();
 
-	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), pixmap);
+	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), frame.getPixMap());
 }
 
 /**
@@ -99,8 +112,8 @@ void RenderCanvas::paintImage() {
  * @return Calculates and returns the current frames size in pixels scaled by the current scale
  */
 QSize RenderCanvas::getScaledImageSize() {
-	int newWidth = scaledInt(pixmap.width());
-	int newHeight = scaledInt(pixmap.height());
+	int newWidth = scaledInt(frame.width());
+	int newHeight = scaledInt(frame.height());
 	return QSize(newWidth, newHeight);
 }
 
@@ -165,12 +178,10 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 	if ( drawing ) {
 		QPoint imagePoint;
 		if ( canvasPointToImagePoint(event->pos(), imagePoint ) ) {
-			cout << imagePoint.x() << " " << imagePoint.y() << endl;
-			QImage image = pixmap.toImage();
+//			cout << imagePoint.x() << " " << imagePoint.y() << endl;
+			QImage& image = frame.getImage();
 
 			image.setPixelColor(imagePoint, QColor(255,0,0 ) );
-
-			pixmap = QPixmap::fromImage(image);
 
 			repaint();
 		}
@@ -184,9 +195,9 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
  * @param event
  */
 void RenderCanvas::wheelEvent(QWheelEvent *event) {
-	QSize oldScaledSize = getScaledImageSize();
+	QSizeF oldScaledSize = getScaledImageSize();
 
-	scale = scale + event->angleDelta().y() * scaleScrollSpeed;
+	scale = scale *(1+event->angleDelta().y() * scaleScrollSpeed);
 
 	// Clamp the scale
 	if ( scale < minScale ) {
@@ -196,10 +207,10 @@ void RenderCanvas::wheelEvent(QWheelEvent *event) {
 	}
 
 	// translate the image so that it appears to pivot around the center of the image
-	QSize newScaledSize = getScaledImageSize();
-	translation.setX( translation.x() - ((float)newScaledSize.width() - (float)oldScaledSize.width()) * 0.5f);
+	QSizeF newScaledSize = getScaledImageSize();
+	translation.setX( translation.x() - (newScaledSize.width() - oldScaledSize.width()) * 0.5f);
 
-	translation.setY( translation.y() - ((float)newScaledSize.height() - (float)oldScaledSize.height()) * 0.5f);
+	translation.setY( translation.y() - (newScaledSize.height() - oldScaledSize.height()) * 0.5f);
 
 	repaint();
 }
