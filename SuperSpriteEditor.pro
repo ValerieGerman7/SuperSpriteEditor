@@ -29,13 +29,15 @@ SOURCES += \
         mainwindow.cpp \
     animationpreviewwindow.cpp \
     rendercanvas.cpp \
-    spriteframe.cpp
+    spriteframe.cpp \
+    animation.cpp
 
 HEADERS += \
         mainwindow.h \
     animationpreviewwindow.h \
     rendercanvas.h \
-    spriteframe.h
+    spriteframe.h \
+    animation.h
 
 FORMS += \
         mainwindow.ui \
