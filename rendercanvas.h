@@ -27,6 +27,9 @@ class RenderCanvas : public QWidget
 {
     Q_OBJECT
 
+public:
+    QColor toolColor;
+
 // Startup settings
 private:
 
