@@ -181,7 +181,7 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 //			cout << imagePoint.x() << " " << imagePoint.y() << endl;
 			QImage& image = frame.getImage();
 
-            image.setPixelColor(imagePoint, toolColor );
+			image.setPixelColor(imagePoint, toolColor );
 
 			repaint();
 		}

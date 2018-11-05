@@ -20,12 +20,8 @@ public:
 private slots:
     void on_previewAnimationButton_clicked();
     void on_quitButton_clicked();
-    void redSliderChanged(int);
-//    void redSliderTextChanged();
-    void greenSliderChanged(int);
-//    void greenSliderTextChanged();
-    void blueSliderChanged(int);
-//    void blueSliderTextChanged();
+    void colorSliderChanged();
+    void colorSliderTextChanged();
 
 private:
     int rgb[3] = { 0 };
@@ -33,7 +29,7 @@ private:
     AnimationPreviewWindow animationPreviewWindow;
 
     std::string getCurrentHexColor();
-    void updateToolColor(int, int, int);
+    void updateToolColor(int[3]);
 
 };
 

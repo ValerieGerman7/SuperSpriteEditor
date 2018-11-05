@@ -11,9 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->redSlider, SIGNAL(sliderMoved(int)), this, SLOT(redSliderChanged(int)));
-    connect(ui->greenSlider, SIGNAL(sliderMoved(int)), this, SLOT(greenSliderChanged(int)));
-    connect(ui->blueSlider, SIGNAL(sliderMoved(int)), this, SLOT(blueSliderChanged(int)));
+    connect(ui->redSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
+    connect(ui->greenSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
+    connect(ui->blueSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
+    connect(ui->redSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
+    connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
+    connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -33,27 +36,28 @@ std::string MainWindow::getCurrentHexColor() {
     return stream.str();
 }
 
-void MainWindow::redSliderChanged(int val) {
-    ui->redSliderText->setText(QString::number(val));
-    rgb[0] = val;
-    updateToolColor(rgb[0], rgb[1], rgb[2]);
+void MainWindow::colorSliderChanged() {
+    rgb[0] = ui->redSlider->value();
+    rgb[1] = ui->greenSlider->value();
+    rgb[2] = ui->blueSlider->value();
+    ui->redSliderText->setText(QString::number(rgb[0]));
+    ui->greenSlidertext->setText(QString::number(rgb[1]));
+    ui->blueSliderText->setText(QString::number(rgb[2]));
+    updateToolColor(rgb);
 }
 
-void MainWindow::greenSliderChanged(int val) {
-    ui->greenSlidertext->setText(QString::number(val));
-    rgb[1] = val;
-    updateToolColor(rgb[0], rgb[1], rgb[2]);
+void MainWindow::colorSliderTextChanged() {
+    rgb[0] = ui->redSliderText->text().toInt();
+    rgb[1] = ui->greenSlidertext->text().toInt();
+    rgb[2] = ui->blueSliderText->text().toInt();
+    ui->redSlider->setValue(rgb[0]);
+    ui->greenSlider->setValue(rgb[1]);
+    ui->blueSlider->setValue(rgb[2]);
+    updateToolColor(rgb);
 }
 
-void MainWindow::blueSliderChanged(int val) {
-    //int val = ui->blueSlider->value();
-    ui->blueSliderText->setText(QString::number(val));
-    rgb[2] = val;
-    updateToolColor(rgb[0], rgb[1], rgb[2]);
-}
-
-void MainWindow::updateToolColor(int r, int g, int b) {
-    QColor color(r, g, b, 255);
+void MainWindow::updateToolColor(int _rgb[]) {
+    QColor color(_rgb[0], _rgb[1], _rgb[2], 255);
     ui->renderAreaPlaceHolder->toolColor = (color);
     ui->currentColorText->setText(getCurrentHexColor().c_str());
     QString style = QString("background-color: %1; border: 2px solid #000000;").arg(getCurrentHexColor().c_str());
