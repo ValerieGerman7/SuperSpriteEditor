@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "drawingtools.h"
 #include <QDebug>
 #include <sstream>
 #include <iomanip>
@@ -11,6 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     updateToolColor(rgb);
+
+    // tool related signals and slots
+    connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
+    connect(ui->fillButton, SIGNAL(pressed()), this, SLOT(setUseFill()));
 
     // palette related signals and slots
     connect(ui->redSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
@@ -77,7 +82,8 @@ void MainWindow::colorSliderTextChanged() {
  */
 void MainWindow::updateToolColor(int _rgb[]) {
     QColor color(_rgb[0], _rgb[1], _rgb[2], 255);
-    ui->renderAreaPlaceHolder->toolColor = (color);
+    DrawingTools::toolColor = color;
+    //ui->renderAreaPlaceHolder->toolColor = (color);
     ui->currentColorText->setText(getCurrentHexColor().c_str());
     QString style = QString("background-color: %1; border: 2px solid #000000;").arg(getCurrentHexColor().c_str());
     ui->colorPreview->setStyleSheet(style);
@@ -120,6 +126,16 @@ void MainWindow::clearPalette() {
     ui->paletteTable->clear();
     ui->addToPaletteBtn->setEnabled(true);
     paletteCount = 0;
+}
+
+void MainWindow::setUsePen() {
+    DrawingTools::currentTool = DrawingTools::PEN;
+    ui->fillButton->setChecked(false);
+}
+
+void MainWindow::setUseFill() {
+    DrawingTools::currentTool = DrawingTools::FILL;
+    ui->drawButton->setChecked(false);
 }
 
 

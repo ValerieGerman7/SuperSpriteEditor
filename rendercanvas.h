@@ -25,10 +25,7 @@
 
 class RenderCanvas : public QWidget
 {
-    Q_OBJECT
-
-public:
-    QColor toolColor;
+	Q_OBJECT
 
 // Startup settings
 private:
@@ -37,7 +34,7 @@ private:
 	 * @brief scaleScrollSpeed
 	 * The modifier for how the delta from the scroll wheel effects the scale.
 	 */
-	const float scaleScrollSpeed = 0.005f;
+	const float scaleScrollSpeed = 0.001f;
 
 	/**
 	 * @brief minScale
@@ -47,7 +44,7 @@ private:
 	/**
 	 * @brief maxScale
 	 */
-	const float maxScale = 10;
+	const float maxScale = 20;
 
 // Private members
 private:

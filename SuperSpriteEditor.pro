@@ -31,7 +31,8 @@ SOURCES += \
     rendercanvas.cpp \
     spriteframe.cpp \
     animation.cpp \
-    sseio.cpp
+    sseio.cpp \
+    drawingtools.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     rendercanvas.h \
     spriteframe.h \
     animation.h \
-    sseio.h
+    sseio.h \
+    drawingtools.h
 
 FORMS += \
         mainwindow.ui \

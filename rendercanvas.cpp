@@ -1,4 +1,5 @@
 #include "rendercanvas.h"
+#include "drawingtools.h"
 #include <iostream>
 #include <QMouseEvent>
 #include <QPointF>
@@ -12,7 +13,8 @@ using namespace std;
  */
 RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
-	currentFrame().load("://drhenrykillinger");
+	//currentFrame().load("://drhenrykillinger");
+	currentFrame().load("://images/black48p.png");
 	transparentBackground.load("://background");
 
 }
@@ -143,6 +145,12 @@ int RenderCanvas::scaledInt(int value, float scale) {
 void RenderCanvas::mousePressEvent(QMouseEvent *event) {
 	if (event->button()==Qt::LeftButton){
 		drawing = true;
+		QPoint imagePoint;
+		if ( canvasPointToImagePoint(event->pos(), imagePoint ) ) {
+			QImage& image = frame.getImage();
+			DrawingTools::useCurrentTool(image, imagePoint);
+			repaint();
+		}
 	} else
 	if (event->button()==Qt::MiddleButton){
 		translating = true;
@@ -181,8 +189,8 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 //			cout << imagePoint.x() << " " << imagePoint.y() << endl;
 			QImage& image = frame.getImage();
 
-			image.setPixelColor(imagePoint, toolColor );
-
+//			image.setPixelColor(imagePoint, toolColor );
+			DrawingTools::useCurrentTool(image, imagePoint);
 			repaint();
 		}
 
