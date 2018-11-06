@@ -31,8 +31,7 @@ SOURCES += \
     rendercanvas.cpp \
     spriteframe.cpp \
     animation.cpp \
-
-animationtimeline.cpp \
+    animationtimeline.cpp \
     sseio.cpp \
     drawingtools.cpp
 
