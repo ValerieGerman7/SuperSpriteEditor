@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "drawingtools.h"
 #include "animationtimeline.h"
 #include <QDebug>
 #include <sstream>
@@ -11,7 +12,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    updateToolColor(rgb);
 
+    // tool related signals and slots
+    connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
+    connect(ui->fillButton, SIGNAL(pressed()), this, SLOT(setUseFill()));
+
+    // palette related signals and slots
     connect(ui->redSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
     connect(ui->greenSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
     connect(ui->blueSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
@@ -19,9 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
 
-
-    //Timeline
     AnimationTimeline timeline(ui->verticalLayout);
+    
+    connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
+    connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
+    connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 }
 
 MainWindow::~MainWindow()
@@ -34,6 +43,9 @@ void MainWindow::on_previewAnimationButton_clicked()
     animationPreviewWindow.show();
 }
 
+/**
+ * Returns the current color in hex format. Useful for stylesheets.
+ */
 std::string MainWindow::getCurrentHexColor() {
     std::stringstream stream;
     stream << "#" << std::hex << std::setfill('0')
@@ -41,6 +53,10 @@ std::string MainWindow::getCurrentHexColor() {
     return stream.str();
 }
 
+/**
+ * Updates tool color and ui elements that represent the current color when
+ * the value of a palette slider has been changed.
+ */
 void MainWindow::colorSliderChanged() {
     rgb[0] = ui->redSlider->value();
     rgb[1] = ui->greenSlider->value();
@@ -51,6 +67,10 @@ void MainWindow::colorSliderChanged() {
     updateToolColor(rgb);
 }
 
+/**
+ * Updates tool color and ui elements that represent the current color when
+ * the text of a palette slider has been changed.
+ */
 void MainWindow::colorSliderTextChanged() {
     rgb[0] = ui->redSliderText->text().toInt();
     rgb[1] = ui->greenSlidertext->text().toInt();
@@ -61,12 +81,65 @@ void MainWindow::colorSliderTextChanged() {
     updateToolColor(rgb);
 }
 
+/**
+ * Updates the tool color and the box that represents the tool color.
+ */
 void MainWindow::updateToolColor(int _rgb[]) {
     QColor color(_rgb[0], _rgb[1], _rgb[2], 255);
-    ui->renderAreaPlaceHolder->toolColor = (color);
+    DrawingTools::toolColor = color;
+    //ui->renderAreaPlaceHolder->toolColor = (color);
     ui->currentColorText->setText(getCurrentHexColor().c_str());
     QString style = QString("background-color: %1; border: 2px solid #000000;").arg(getCurrentHexColor().c_str());
     ui->colorPreview->setStyleSheet(style);
+}
+
+/**
+ * Adds the currently selected tool color to the palette.
+ */
+void MainWindow::addCurrentColorToPalette() {
+    int row = paletteCount / ui->paletteTable->columnCount();
+    int col = paletteCount % ui->paletteTable->columnCount();
+
+    ui->paletteTable->setItem(row, col, new QTableWidgetItem);
+    ui->paletteTable->item(row, col)->setBackgroundColor(QColor(rgb[0], rgb[1], rgb[2], 255));
+    paletteCount++;
+
+    // what would be the best way to handle a full palette?
+    if (row >= ui->paletteTable->rowCount() - 1 && col >= ui->paletteTable->columnCount() - 1) {
+        qDebug("too many colors for palette");
+        ui->addToPaletteBtn->setEnabled(false);
+    }
+}
+
+/**
+ * Sets the tool color to the color selected from the palette.
+ */
+void MainWindow::setColorFromPalette(int row, int col) {
+
+    // if selecting a position with no value set, do nothing
+    if (!ui->paletteTable->item(row, col)) {
+        return;
+    }
+
+    QColor paletteColor = ui->paletteTable->item(row, col)->backgroundColor();
+    paletteColor.getRgb(&rgb[0], &rgb[1], &rgb[2]);
+    updateToolColor(rgb);
+}
+
+void MainWindow::clearPalette() {
+    ui->paletteTable->clear();
+    ui->addToPaletteBtn->setEnabled(true);
+    paletteCount = 0;
+}
+
+void MainWindow::setUsePen() {
+    DrawingTools::currentTool = DrawingTools::PEN;
+    ui->fillButton->setChecked(false);
+}
+
+void MainWindow::setUseFill() {
+    DrawingTools::currentTool = DrawingTools::FILL;
+    ui->drawButton->setChecked(false);
 }
 
 

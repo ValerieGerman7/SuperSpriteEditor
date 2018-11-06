@@ -20,11 +20,21 @@ public:
 private slots:
     void on_previewAnimationButton_clicked();
     void on_quitButton_clicked();
+
+    // tool slots
+    void setUsePen();
+    void setUseFill();
+
+    // palette slots
     void colorSliderChanged();
     void colorSliderTextChanged();
+    void addCurrentColorToPalette();
+    void setColorFromPalette(int, int);
+    void clearPalette();
 
 private:
     int rgb[3] = { 0 };
+    int paletteCount = 0;
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
 
