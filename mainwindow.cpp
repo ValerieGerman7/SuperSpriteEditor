@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "animationtimeline.h"
 #include <QDebug>
 #include <sstream>
 #include <iomanip>
@@ -17,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->redSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
+
+
+    //Timeline
+    AnimationTimeline timeline(ui->verticalLayout);
 }
 
 MainWindow::~MainWindow()

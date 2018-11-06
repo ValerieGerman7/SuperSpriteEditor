@@ -47,7 +47,7 @@
         <x>0</x>
         <y>0</y>
         <width>231</width>
-        <height>75</height>
+        <height>69</height>
        </rect>
       </property>
       <attribute name="label">
@@ -118,7 +118,7 @@
         <x>0</x>
         <y>0</y>
         <width>231</width>
-        <height>75</height>
+        <height>69</height>
        </rect>
       </property>
       <attribute name="label">
@@ -229,6 +229,9 @@
       <height>431</height>
      </rect>
     </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
@@ -243,8 +246,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>79</width>
-       <height>466</height>
+       <width>78</width>
+       <height>474</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -810,7 +813,7 @@ border: 2px solid #000000;</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

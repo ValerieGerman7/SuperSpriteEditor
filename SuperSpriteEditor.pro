@@ -30,14 +30,16 @@ SOURCES += \
     animationpreviewwindow.cpp \
     rendercanvas.cpp \
     spriteframe.cpp \
-    animation.cpp
+    animation.cpp \
+    animationtimeline.cpp
 
 HEADERS += \
         mainwindow.h \
     animationpreviewwindow.h \
     rendercanvas.h \
     spriteframe.h \
-    animation.h
+    animation.h \
+    animationtimeline.h
 
 FORMS += \
         mainwindow.ui \
