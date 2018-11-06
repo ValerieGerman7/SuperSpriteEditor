@@ -1,15 +1,15 @@
 #ifndef SSEIO_H
 #define SSEIO_H
 
-#include <fstream>
+#include "animation.h"
 
-class SSEIO
-{
+class SSEIO {
+
 public:
 
     SSEIO();
-    void save();
-    void load();
+    void save(Animation& sprite, std::string path);
+    Animation& load(std::string path);
     void exportGif();
 
 private:
