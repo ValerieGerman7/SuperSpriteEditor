@@ -22,9 +22,13 @@ private slots:
     void on_quitButton_clicked();
     void colorSliderChanged();
     void colorSliderTextChanged();
+    void addCurrentColorToPalette();
+    void setColorFromPalette(int, int);
+    void clearPalette();
 
 private:
     int rgb[3] = { 0 };
+    int paletteCount = 0;
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
 
