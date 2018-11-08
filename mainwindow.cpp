@@ -14,6 +14,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 {
     ui->setupUi(this);
     updateToolColor(rgb);
+    previewPaneUpdateTimer = new QTimer(this);
+    previewPaneUpdateTimer->start(10000 / ui->previewFpsSlider->value());
 
     this->model = &model;
 
@@ -52,6 +54,9 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
+
+    //previewpane signals and slots
+    connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
 
     timeline = new AnimationTimeline(ui->verticalLayout);
 }
@@ -209,4 +214,26 @@ void MainWindow::quit() {
 void MainWindow::on_quitButton_clicked()
 {
     quit();
+}
+
+void MainWindow::nextFrame(){
+    //get next pixmap
+
+    QPixmap testPixmap("://images/black48p.png");
+    ui->previewPane->setPixmap(testPixmap);
+    ui->previewPane->repaint();
+
+    if(animationPreviewWindow.isVisible()){
+        animationPreviewWindow.nextFrame(testPixmap);
+    }
+}
+
+void MainWindow::on_previewFpsSlider_valueChanged(int value)
+{
+    if(value > 0) {
+        previewPaneUpdateTimer->start(10000 / value);
+    }
+    else {
+      previewPaneUpdateTimer->stop();
+    }
 }
