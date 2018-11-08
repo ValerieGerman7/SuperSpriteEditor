@@ -31,25 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
     timeline = new AnimationTimeline(ui->verticalLayout);
-    connect(this, &MainWindow::timelineButtonPressed, timeline, &AnimationTimeline::timelineButtonPressSlot);
-    //connect(this, SIGNAL(timelineButtonPress(QPushButton*)), &timeline, SLOT(buttonPress(QPushButton*)));
-
-    //Timeline button connections
-    //QPushButton * button = qobject_cast<QPushButton*>(ui->verticalLayout->itemAt(0)->widget());
-    //button->setText("first");
-    //connect(button, &QPushButton::pressed, this, &MainWindow::test);//&timeline, &AnimationTimeline::addNewBlankFrame);
 
 }
-
-void MainWindow::timelineButtonPress(){
-    std::cout<< "push"<<std::endl;
-    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
-    emit timelineButtonPressed(buttonSender);
-}
-
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete timeline;
 }
 
 void MainWindow::on_previewAnimationButton_clicked()

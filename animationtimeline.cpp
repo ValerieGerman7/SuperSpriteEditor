@@ -11,7 +11,8 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     plusButton->setText("+");
     plusButton->setFixedHeight(30);
     plusButton->setFixedWidth(30);
-
+    QObject::connect(plusButton, &QPushButton::pressed, this,
+                     &AnimationTimeline::addNewBlankFrame);
     timelineLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 
 
@@ -32,8 +33,8 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     QPushButton *frameButton = new QPushButton;
     frameButton->setText(QString::number(tempAddingCounter));
     tempAddingCounter++;
-    frameButton->setFixedWidth(20);
-    frameButton->setFixedHeight(20);
+    frameButton->setFixedWidth(30);
+    frameButton->setFixedHeight(30);
 
     auto it = frameButtons.begin();
     frameButtons.push_back(frameButton);

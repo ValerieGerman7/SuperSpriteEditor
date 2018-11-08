@@ -34,9 +34,6 @@ private slots:
     void setColorFromPalette(int, int);
     void clearPalette();
 
-    void timelineButtonPress();
-public: signals:
-    void timelineButtonPressed(QPushButton*);
 
 private:
     int rgb[3] = { 0 };
