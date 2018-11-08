@@ -1,6 +1,6 @@
 #include "animationtimeline.h"
 
-AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, MainWindow* main, QObject *parent) : timelineLayout(layout)
+AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : timelineLayout(layout)
 {
 
     //Add the first frame
@@ -11,7 +11,7 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, MainWindow* main, QObj
     plusButton->setText("+");
     plusButton->setFixedHeight(30);
     plusButton->setFixedWidth(30);
-    QObject::connect(plusButton, &QPushButton::clicked, main, &MainWindow::test);
+
     timelineLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 
 
@@ -83,4 +83,8 @@ void AnimationTimeline::selectFrame(){
     //QString content = selectedButton->text();
     //std::cout << content << std::endl;
     std::cout << "test" << std::endl;
+}
+
+void AnimationTimeline::timelineButtonPressSlot(QPushButton* button){
+    std::cout<<"Button pressed"<<std::endl;
 }

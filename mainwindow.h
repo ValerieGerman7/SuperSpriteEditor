@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <string>
 #include "animationpreviewwindow.h"
+#include "qpushbutton.h"
+#include "animationtimeline.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,14 +33,18 @@ private slots:
     void addCurrentColorToPalette();
     void setColorFromPalette(int, int);
     void clearPalette();
-public slots:
-    void test();
+
+    void timelineButtonPress();
+public: signals:
+    void timelineButtonPressed(QPushButton*);
 
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
+
+    AnimationTimeline* timeline;
 
     std::string getCurrentHexColor();
     void updateToolColor(int[3]);

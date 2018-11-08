@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "drawingtools.h"
-#include "animationtimeline.h"
 #include <QDebug>
 #include <sstream>
 #include <iomanip>
@@ -31,23 +30,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
-     AnimationTimeline timeline(ui->verticalLayout, this);
-    //Timeline button connections
-    QPushButton * button = qobject_cast<QPushButton*>(ui->verticalLayout->itemAt(0)->widget());
-    button->setText("first");
-    connect(button, &QPushButton::pressed, this, &MainWindow::test);//&timeline, &AnimationTimeline::addNewBlankFrame);
+    timeline = new AnimationTimeline(ui->verticalLayout);
+    connect(this, &MainWindow::timelineButtonPressed, timeline, &AnimationTimeline::timelineButtonPressSlot);
+    //connect(this, SIGNAL(timelineButtonPress(QPushButton*)), &timeline, SLOT(buttonPress(QPushButton*)));
 
-/*
-    QPushButton *plusButton = new QPushButton;
-    plusButton->setText("+");
-    plusButton->setFixedHeight(30);
-    plusButton->setFixedWidth(30);
-    connect(plusButton, &QPushButton::clicked, &timeline, &AnimationTimeline::addNewBlankFrame);
-    ui->verticalLayout->addWidget(plusButton, 0, Qt::AlignHCenter);*/
+    //Timeline button connections
+    //QPushButton * button = qobject_cast<QPushButton*>(ui->verticalLayout->itemAt(0)->widget());
+    //button->setText("first");
+    //connect(button, &QPushButton::pressed, this, &MainWindow::test);//&timeline, &AnimationTimeline::addNewBlankFrame);
+
 }
 
-void MainWindow::test(){
+void MainWindow::timelineButtonPress(){
     std::cout<< "push"<<std::endl;
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    emit timelineButtonPressed(buttonSender);
 }
 
 MainWindow::~MainWindow()

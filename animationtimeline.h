@@ -2,9 +2,7 @@
 #define ANIMATIONTIMELINE_H
 #include "spriteframe.h"
 #include "QPushButton"
-#include "mainwindow.h"
 #include <QObject>
-#include <QMainWindow>
 #include <QVBoxLayout>
 #include <iostream>
 
@@ -13,7 +11,7 @@ class AnimationTimeline : public QObject {
 
 public:
 
-    AnimationTimeline(QVBoxLayout*, MainWindow*,QObject *parent = nullptr);
+    AnimationTimeline(QVBoxLayout*, QObject *parent = nullptr);
 
     ~AnimationTimeline();
 
@@ -38,6 +36,8 @@ public slots:
     void addNewBlankFrame();
 
     void selectFrame();
+
+    void timelineButtonPressSlot(QPushButton*);
 
 };
 
