@@ -11,7 +11,7 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     plusButton->setText("+");
     plusButton->setFixedHeight(30);
     plusButton->setFixedWidth(30);
-    QObject::connect(plusButton, &QPushButton::pressed, this, &AnimationTimeline::addNewBlankFrame);
+    QObject::connect(plusButton, &QPushButton::clicked, this, &AnimationTimeline::addNewBlankFrame);
     timelineLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 
 
@@ -44,8 +44,9 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
                      //[this](QPushButton* frameButton){this->selectFrame(frameButton); });
 
     timelineLayout->addWidget(frameButton, 0, Qt::AlignHCenter);
+    frameButton->show();
 
-
+    std::cout<< "adding frame"<<std::endl;
 
     //Add above plus
 
