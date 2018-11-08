@@ -31,19 +31,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
-     AnimationTimeline timeline(ui->verticalLayout);
+     AnimationTimeline timeline(ui->verticalLayout, this);
     //Timeline button connections
     QPushButton * button = qobject_cast<QPushButton*>(ui->verticalLayout->itemAt(0)->widget());
     button->setText("first");
-    connect(button, &QPushButton::pressed, &timeline, &AnimationTimeline::addNewBlankFrame);
+    connect(button, &QPushButton::pressed, this, &MainWindow::test);//&timeline, &AnimationTimeline::addNewBlankFrame);
 
-
+/*
     QPushButton *plusButton = new QPushButton;
     plusButton->setText("+");
     plusButton->setFixedHeight(30);
     plusButton->setFixedWidth(30);
     connect(plusButton, &QPushButton::clicked, &timeline, &AnimationTimeline::addNewBlankFrame);
-    ui->verticalLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
+    ui->verticalLayout->addWidget(plusButton, 0, Qt::AlignHCenter);*/
+}
+
+void MainWindow::test(){
+    std::cout<< "push"<<std::endl;
 }
 
 MainWindow::~MainWindow()

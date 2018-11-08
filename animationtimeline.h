@@ -2,6 +2,7 @@
 #define ANIMATIONTIMELINE_H
 #include "spriteframe.h"
 #include "QPushButton"
+#include "mainwindow.h"
 #include <QObject>
 #include <QMainWindow>
 #include <QVBoxLayout>
@@ -12,7 +13,7 @@ class AnimationTimeline : public QObject {
 
 public:
 
-    AnimationTimeline(QVBoxLayout*, QObject *parent = nullptr);
+    AnimationTimeline(QVBoxLayout*, MainWindow*,QObject *parent = nullptr);
 
     ~AnimationTimeline();
 

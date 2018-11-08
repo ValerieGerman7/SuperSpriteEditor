@@ -31,6 +31,8 @@ private slots:
     void addCurrentColorToPalette();
     void setColorFromPalette(int, int);
     void clearPalette();
+public slots:
+    void test();
 
 private:
     int rgb[3] = { 0 };

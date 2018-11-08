@@ -1,8 +1,8 @@
 #include "animationtimeline.h"
 
-AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : timelineLayout(layout)
+AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, MainWindow* main, QObject *parent) : timelineLayout(layout)
 {
-/*
+
     //Add the first frame
     addNewBlankFrame();
     //selectFrame();
@@ -11,11 +11,11 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     plusButton->setText("+");
     plusButton->setFixedHeight(30);
     plusButton->setFixedWidth(30);
-    QObject::connect(plusButton, &QPushButton::clicked, this, &AnimationTimeline::addNewBlankFrame);
+    QObject::connect(plusButton, &QPushButton::clicked, main, &MainWindow::test);
     timelineLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 
 
-    frameButtons.push_back(plusButton);*/
+    frameButtons.push_back(plusButton);
 }
 
 AnimationTimeline::~AnimationTimeline(){
