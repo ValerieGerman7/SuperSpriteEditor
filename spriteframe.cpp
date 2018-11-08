@@ -30,6 +30,11 @@ QImage& SpriteFrame::getImage() {
 	return image;
 }
 
+void SpriteFrame::setImage(QImage& newImage) {
+    image =newImage;
+    invalidatePixmap();
+}
+
 /**
  * @brief SpriteFrame::GetPixMap
  * @return The current pixmap. It is made if needed.

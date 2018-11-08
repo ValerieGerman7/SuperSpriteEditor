@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include "animationpreviewwindow.h"
+#include "spritemodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,7 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow( SpriteModel& model, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:

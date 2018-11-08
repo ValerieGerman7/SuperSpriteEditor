@@ -20,6 +20,10 @@ void Animation::moveFrame(int oldIndex, int newIndex){
     insertFrame(newIndex, frame);
 }
 
-SpriteFrame Animation::getFrame(int index){
+SpriteFrame& Animation::getFrame(int index){
     return frames[index];
+}
+
+int Animation::length() {
+    return frames.size();
 }

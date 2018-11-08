@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <string>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -27,6 +27,22 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
+
+    // Render canvas
+    ui->renderAreaPlaceHolder->setModel(model); // give the canvas a ref to the model
+    connect(&model, &SpriteModel::currentFrameChanged, ui->renderAreaPlaceHolder,
+            static_cast<void (QWidget::*)()>(&QWidget::repaint));
+            // there's a few QWidget.repaint() functions, so cast/force it to the zero parameters one
+
+    // Flip and rotate buttons
+    connect(ui->flipHorizontalButton, &QPushButton::pressed,
+            &model, &SpriteModel::flipCurrentFrameHorizontally );
+    connect(ui->flipVerticalButton, &QPushButton::pressed,
+            &model, &SpriteModel::flipCurrentFrameVertically );
+    connect(ui->rotateLeftButton, &QPushButton::pressed,
+            &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
+    connect(ui->rotateRightButton, &QPushButton::pressed,
+            &model, &SpriteModel::rotateCurrentFrameClockWise );
 }
 
 MainWindow::~MainWindow()

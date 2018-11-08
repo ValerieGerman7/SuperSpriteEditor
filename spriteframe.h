@@ -54,6 +54,8 @@ class SpriteFrame {
 
 		QImage& getImage();
 
+        void setImage(QImage&);
+
 	// Private Helper Functions
 	private:
 		void invalidatePixmap();
