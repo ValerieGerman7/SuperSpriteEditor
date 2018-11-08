@@ -38,8 +38,6 @@ public slots:
 
     void selectFrame();
 
-    void timelineButtonPressSlot(QPushButton*);
-
 };
 
 #endif // ANIMATIONTIMELINE_H

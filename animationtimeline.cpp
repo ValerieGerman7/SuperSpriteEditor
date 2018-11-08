@@ -2,11 +2,10 @@
 
 AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : timelineLayout(layout)
 {
-
     frameCount = 0;
     //Add the first frame
     addNewBlankFrame();
-    //selectFrame();
+    //TODO: Set as selected
 
     QPushButton *plusButton = new QPushButton;
     plusButton->setText("+");
@@ -15,14 +14,14 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
     timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
-
+    frameCount++;
 
     frameButtons.push_back(plusButton);
 }
 
 AnimationTimeline::~AnimationTimeline(){
-    for(size_t i = 0; i < frameButtons.size(); i++){
-        //delete frameButtons[i];
+    for(size_t i = 0; i < frameCount; i++){
+        delete frameButtons[i];
     }
 }
 
@@ -40,8 +39,10 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     //Remove plus (if frames on list)
     size_t index = frameCount - 1;
     QPushButton* plusButton;
-    if(frameCount > 0){
+    bool removePlus = frameCount > 1;
+    if(removePlus){
         plusButton = frameButtons.at(index);
+        plusButton->setText("++");
         frameButtons.pop_back();
         timelineLayout->removeWidget(plusButton);
     }
@@ -54,7 +55,7 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     timelineLayout->addWidget(frameButton, 0, Qt::AlignTop);
     frameButton->show();
 
-    if(index >= 0){
+    if(removePlus){
         //Add back plus
         frameButtons.push_back(plusButton);
         timelineLayout->addWidget(plusButton);
@@ -65,7 +66,11 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
 }
 
 void AnimationTimeline::deleteFrame(int frameIndex){
-
+    QPushButton* remove = frameButtons.at(frameIndex);
+    frameButtons.erase(frameButtons.begin() + frameIndex);
+    timelineLayout->removeWidget(remove);
+    frameCount--;
+    delete remove;
 }
 
 void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
@@ -78,11 +83,11 @@ void AnimationTimeline::addNewBlankFrame(){
     addNewFrame(newFrame);
 }
 
-/* Selecte the current frame (to change drawing area)
+/* Select the current frame (to change drawing area)
  * The button's pointer is passed in to identify the frame.
 */
 void AnimationTimeline::selectFrame(){
-    //QPushButton* send = qobject_cast<QPushButton*>(sender());
+    QPushButton* send = qobject_cast<QPushButton*>(sender());
 
     //Find index
     //size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
@@ -94,8 +99,4 @@ void AnimationTimeline::selectFrame(){
     //QString content = selectedButton->text();
     //std::cout << content << std::endl;
     std::cout << "test" << std::endl;
-}
-
-void AnimationTimeline::timelineButtonPressSlot(QPushButton* button){
-    std::cout<<"Button pressed"<<std::endl;
 }
