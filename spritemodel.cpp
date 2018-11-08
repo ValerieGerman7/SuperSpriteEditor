@@ -7,6 +7,16 @@ SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
     animation.insertFrame(0, newFrame);
 }
 
+Animation& SpriteModel::getAnimation() {
+    return animation;
+}
+
+void SpriteModel::setAnimation(Animation* anim){
+    animation = *anim;
+    currentIndex = 0;
+    notifyOfFrameChange();
+}
+
 void SpriteModel::setCurrentFrame(int index) {
     currentIndex = index;
     notifyOfFrameChange();
@@ -59,3 +69,4 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
     frame.setImage( image);
     notifyOfFrameChange();
 }
+

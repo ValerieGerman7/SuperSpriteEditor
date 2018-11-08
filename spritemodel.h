@@ -17,6 +17,10 @@ private:
 public:
     explicit SpriteModel(QObject *parent = nullptr);
 
+    Animation& getAnimation();
+
+    void setAnimation(Animation*);
+
     void setCurrentFrame(int);
 
     SpriteFrame& getCurrentFrame();

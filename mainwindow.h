@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 #include <string>
 #include "animationpreviewwindow.h"
 #include "spritemodel.h"
@@ -33,15 +34,23 @@ private slots:
     void setColorFromPalette(int, int);
     void clearPalette();
 
+    // IO slots
+    void saveToFile();
+    void loadFromFile();
+
+    void quit();
+
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
+    QFileDialog fileDialog;
+
+    SpriteModel *model;
 
     std::string getCurrentHexColor();
     void updateToolColor(int[3]);
-
 };
 
 #endif // MAINWINDOW_H

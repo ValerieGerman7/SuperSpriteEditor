@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "drawingtools.h"
-#include "sseio.h"
 #include <QDebug>
 #include <sstream>
 #include <iomanip>
@@ -13,8 +12,6 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 {
     ui->setupUi(this);
     updateToolColor(rgb);
-
-    this->model = &model;
 
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
@@ -46,10 +43,6 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
             &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
     connect(ui->rotateRightButton, &QPushButton::pressed,
             &model, &SpriteModel::rotateCurrentFrameClockWise );
-            
-    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
-    connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
-    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 }
 
 MainWindow::~MainWindow()
@@ -161,29 +154,8 @@ void MainWindow::setUseFill() {
     ui->drawButton->setChecked(false);
 }
 
-void MainWindow::saveToFile() {
-    SSEIO io; //placeholder default io object
-//    Animation anim; //placeholder default Animation object
-    QString saveFileName = fileDialog.getSaveFileName(this,
-        tr("Save As .ssp"), "",
-        tr("Sprite Sheet Project (*.ssp)"));
-    io.save(model->getAnimation(),saveFileName);
-}
-
-void MainWindow::loadFromFile() {
-    SSEIO io; //paceholder default io object
-    QString loadFileName = fileDialog.getOpenFileName(this,
-        tr("Open .ssp File"), "",
-        tr("Sprite Sheet Project (*.ssp)"));
-    auto animation = io.load(loadFileName);
-    model->setAnimation(animation);
-}
-
-void MainWindow::quit() {
-    close();
-}
 
 void MainWindow::on_quitButton_clicked()
 {
-    quit();
+    close();
 }

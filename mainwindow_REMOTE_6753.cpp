@@ -7,14 +7,12 @@
 #include <iomanip>
 #include <string>
 
-MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     updateToolColor(rgb);
-
-    this->model = &model;
 
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
@@ -30,23 +28,6 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
-
-    // Render canvas
-    ui->renderAreaPlaceHolder->setModel(model); // give the canvas a ref to the model
-    connect(&model, &SpriteModel::currentFrameChanged, ui->renderAreaPlaceHolder,
-            static_cast<void (QWidget::*)()>(&QWidget::repaint));
-            // there's a few QWidget.repaint() functions, so cast/force it to the zero parameters one
-
-    // Flip and rotate buttons
-    connect(ui->flipHorizontalButton, &QPushButton::pressed,
-            &model, &SpriteModel::flipCurrentFrameHorizontally );
-    connect(ui->flipVerticalButton, &QPushButton::pressed,
-            &model, &SpriteModel::flipCurrentFrameVertically );
-    connect(ui->rotateLeftButton, &QPushButton::pressed,
-            &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
-    connect(ui->rotateRightButton, &QPushButton::pressed,
-            &model, &SpriteModel::rotateCurrentFrameClockWise );
-            
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
@@ -163,11 +144,11 @@ void MainWindow::setUseFill() {
 
 void MainWindow::saveToFile() {
     SSEIO io; //placeholder default io object
-//    Animation anim; //placeholder default Animation object
+    Animation anim; //placeholder default Animation object
     QString saveFileName = fileDialog.getSaveFileName(this,
         tr("Save As .ssp"), "",
         tr("Sprite Sheet Project (*.ssp)"));
-    io.save(model->getAnimation(),saveFileName);
+    io.save(anim,saveFileName);
 }
 
 void MainWindow::loadFromFile() {
@@ -175,8 +156,7 @@ void MainWindow::loadFromFile() {
     QString loadFileName = fileDialog.getOpenFileName(this,
         tr("Open .ssp File"), "",
         tr("Sprite Sheet Project (*.ssp)"));
-    auto animation = io.load(loadFileName);
-    model->setAnimation(animation);
+    io.load(loadFileName);
 }
 
 void MainWindow::quit() {
