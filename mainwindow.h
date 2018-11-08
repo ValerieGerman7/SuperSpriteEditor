@@ -7,6 +7,7 @@
 #include "animationpreviewwindow.h"
 #include "spritemodel.h"
 #include "animationtimeline.h"
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -19,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow( SpriteModel& model, QWidget *parent = nullptr);
     ~MainWindow();
-
+    QTimer *previewPaneUpdateTimer;
 private slots:
     void on_previewAnimationButton_clicked();
     void on_quitButton_clicked();
@@ -40,6 +41,10 @@ private slots:
     void loadFromFile();
 
     void quit();
+
+    void nextFrame();
+
+    void on_previewFpsSlider_valueChanged(int value);
 
 private:
     int rgb[3] = { 0 };
