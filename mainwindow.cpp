@@ -26,11 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
 
-    AnimationTimeline timeline(ui->verticalLayout);
+
     
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
+
+    AnimationTimeline timeline(ui->verticalLayout);
+
 }
 
 MainWindow::~MainWindow()

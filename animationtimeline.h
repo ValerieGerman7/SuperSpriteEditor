@@ -2,12 +2,19 @@
 #define ANIMATIONTIMELINE_H
 #include "spriteframe.h"
 #include "QPushButton"
+#include <QObject>
+#include <QMainWindow>
 #include <QVBoxLayout>
+#include <iostream>
 
-class AnimationTimeline
-{
+class AnimationTimeline : public QObject {
+    Q_OBJECT
+
 public:
-    AnimationTimeline(QVBoxLayout*);
+
+    AnimationTimeline(QVBoxLayout*, QObject *parent = nullptr);
+
+    ~AnimationTimeline();
 
     void duplicateFrame(int frameIndex);
 
@@ -19,6 +26,17 @@ public:
 
 private:
     QVBoxLayout* timelineLayout;
+
+    std::vector<QPushButton*> frameButtons;
+
+    QPushButton* selectedButton;
+    int tempAddingCounter = 0;
+
+
+public slots:
+    void addNewBlankFrame();
+
+    void selectFrame();
 
 };
 
