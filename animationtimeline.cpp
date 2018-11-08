@@ -2,7 +2,7 @@
 
 AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : timelineLayout(layout)
 {
-
+/*
     //Add the first frame
     addNewBlankFrame();
     //selectFrame();
@@ -15,7 +15,7 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     timelineLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 
 
-    frameButtons.push_back(plusButton);
+    frameButtons.push_back(plusButton);*/
 }
 
 AnimationTimeline::~AnimationTimeline(){
@@ -39,8 +39,8 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     frameButtons.push_back(frameButton);
     //frameButtons.insert(it+(frameButtons.size() - 1), frameButton);
     //Connect
-    //QObject::connect(frameButton, &QPushButton::pressed, this,
-    //                 &AnimationTimeline::selectFrame);
+    QObject::connect(frameButton, &QPushButton::pressed, this,
+                     &AnimationTimeline::selectFrame);
                      //[this](QPushButton* frameButton){this->selectFrame(frameButton); });
 
     timelineLayout->addWidget(frameButton, 0, Qt::AlignHCenter);
@@ -63,6 +63,7 @@ void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
 
 void AnimationTimeline::addNewBlankFrame(){
     SpriteFrame newFrame;
+    std::cout << "blank frame" << std::endl;
     addNewFrame(newFrame);
 }
 

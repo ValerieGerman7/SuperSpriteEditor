@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <QObject>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,15 +26,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->redSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
-
-
     
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
-    AnimationTimeline timeline(ui->verticalLayout);
+     AnimationTimeline timeline(ui->verticalLayout);
+    //Timeline button connections
+    QPushButton * button = qobject_cast<QPushButton*>(ui->verticalLayout->itemAt(0)->widget());
+    button->setText("first");
+    connect(button, &QPushButton::pressed, &timeline, &AnimationTimeline::addNewBlankFrame);
 
+
+    QPushButton *plusButton = new QPushButton;
+    plusButton->setText("+");
+    plusButton->setFixedHeight(30);
+    plusButton->setFixedWidth(30);
+    connect(plusButton, &QPushButton::clicked, &timeline, &AnimationTimeline::addNewBlankFrame);
+    ui->verticalLayout->addWidget(plusButton, 0, Qt::AlignHCenter);
 }
 
 MainWindow::~MainWindow()
