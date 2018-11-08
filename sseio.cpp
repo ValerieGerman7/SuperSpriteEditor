@@ -23,10 +23,10 @@ SSEIO::SSEIO() {
 
 ----Single Frame----
 (Separate rows with a newline)
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] ...\n
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] ...\n
+[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
+[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
 ...
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] ...\n
+[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
  *
  * */
 
@@ -90,26 +90,46 @@ void SSEIO::save(Animation& sprite, QString path) {
  */
 Animation* SSEIO::load(QString path) {
     Animation *anim = new Animation();
-    SpriteFrame frame;
+    QColor pixel;
     std::ifstream infile;
-    std::string line;
+    std::string token;
     int SPRITE_HEIGHT;
     int SPRITE_WIDTH;
     int NUM_FRAMES;
 
-    std::cout << "Load is running" << std::endl;
-
     infile.open(path.toStdString());
     if(infile.is_open()) {
         //special case - first line: "[height] [width]\n"
-        std::getline(infile,line);
-        size_t delimiterIndex = line.find(' ');
-        SPRITE_HEIGHT = std::stoi(line.substr(0,delimiterIndex));
-        SPRITE_WIDTH = std::stoi(line.substr(delimiterIndex + 1,line.length() - delimiterIndex));
+        infile >> token;
+        SPRITE_HEIGHT = std::stoi(token);
+        infile >> token;
+        SPRITE_WIDTH = std::stoi(token);
         //special case - second line: "[num_frames]\n"
-        std::getline(infile,line);
-        NUM_FRAMES = std::stoi(line);
+        infile >> token;
+        NUM_FRAMES = std::stoi(token);
 
+        for(int frameNum = 0; frameNum < NUM_FRAMES; frameNum++) {
+            SpriteFrame currentFrame;
+            QImage image(QSize(SPRITE_WIDTH,SPRITE_HEIGHT),QImage::Format_ARGB32);
+            for(int yPos = 0; yPos < SPRITE_HEIGHT; yPos++) {
+                for(int xPos = 0; xPos < SPRITE_WIDTH; xPos++) {
+                    //get red
+                    infile >> token;
+                    pixel.setRed(stoi(token));
+                    //get green
+                    infile >> token;
+                    pixel.setGreen(stoi(token));
+                    //get blue
+                    infile >> token;
+                    pixel.setBlue(stoi(token));
+                    //get alpha
+                    infile >> token;
+                    pixel.setAlpha(stoi(token));
+                    image.setPixelColor(xPos,yPos,pixel);
+                }
+            }
+            (*anim).insertFrame(frameNum,currentFrame);
+        }
         infile.close();
     }
 
