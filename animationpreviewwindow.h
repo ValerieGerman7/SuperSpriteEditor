@@ -10,7 +10,7 @@ class AnimationPreviewWindow;
 class AnimationPreviewWindow : public QWidget
 {
     Q_OBJECT
-
+    friend class MainWindow;
 public:
     explicit AnimationPreviewWindow(QWidget *parent = nullptr);
     ~AnimationPreviewWindow();
@@ -20,6 +20,7 @@ private slots:
 
 private:
     Ui::AnimationPreviewWindow *ui;
+    void nextFrame(QPixmap);
 };
 
 #endif // ANIMATIONPREVIEWWINDOW_H

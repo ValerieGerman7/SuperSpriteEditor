@@ -3,6 +3,7 @@
 
 #include "animation.h"
 #include "spriteframe.h"
+#include "sseio.h"
 
 #include <QObject>
 
@@ -38,6 +39,8 @@ public:
     void rotateCurrentFrameClockWise();
 
     void rotateCurrentFrameAntiClockWise();
+
+    SSEIO io;
 
 signals:
     void currentFrameChanged();
