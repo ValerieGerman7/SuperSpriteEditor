@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <string>
 
-MainWindow::MainWindow(SSEIO* io, QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -143,18 +143,20 @@ void MainWindow::setUseFill() {
 }
 
 void MainWindow::saveToFile() {
+    SSEIO io; //placeholder default io object
     Animation anim; //placeholder default Animation object
     QString saveFileName = fileDialog.getSaveFileName(this,
         tr("Save As .ssp"), "",
         tr("Sprite Sheet Project (*.ssp)"));
-
+    io.save(anim,saveFileName);
 }
 
 void MainWindow::loadFromFile() {
+    SSEIO io; //paceholder default io object
     QString loadFileName = fileDialog.getOpenFileName(this,
         tr("Open .ssp File"), "",
         tr("Sprite Sheet Project (*.ssp)"));
-
+    io.load(loadFileName);
 }
 
 void MainWindow::quit() {

@@ -5,6 +5,8 @@
 #include <vector>
 #include <QImage>
 
+#include <iostream>
+
 SSEIO::SSEIO() {
 
 }
@@ -91,11 +93,23 @@ Animation SSEIO::load(QString path) {
     SpriteFrame frame;
     std::ifstream infile;
     std::string line;
+    int SPRITE_HEIGHT;
+    int SPRITE_WIDTH;
+    int NUM_FRAMES;
+
+    std::cout << "Load is running" << std::endl;
+
     infile.open(path.toStdString());
     if(infile.is_open()) {
-        if(infile >> line) {
+        //special case - first line: "[height] [width]\n"
+        std::getline(infile,line);
+        size_t delimiterIndex = line.find(' ');
+        SPRITE_HEIGHT = std::stoi(line.substr(0,delimiterIndex));
+        SPRITE_WIDTH = std::stoi(line.substr(delimiterIndex + 1,line.length() - delimiterIndex));
+        //special case - second line: "[num_frames]\n"
+        std::getline(infile,line);
+        NUM_FRAMES = std::stoi(line);
 
-        }
         infile.close();
     }
 
