@@ -54,10 +54,6 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
-<<<<<<< HEAD
-
-=======
->>>>>>> bdb15daeae80dfc633b19207542fc49ff4da15dd
 
     //previewpane signals and slots
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
