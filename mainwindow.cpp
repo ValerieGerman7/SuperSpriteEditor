@@ -52,7 +52,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
-}
+
 
     timeline = new AnimationTimeline(ui->verticalLayout);
 
