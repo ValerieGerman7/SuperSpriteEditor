@@ -27,6 +27,7 @@ private:
     QVBoxLayout* timelineLayout;
 
     std::vector<QPushButton*> frameButtons;
+    size_t frameCount;
 
     QPushButton* selectedButton;
     int tempAddingCounter = 0;
