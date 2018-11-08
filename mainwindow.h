@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include "animationpreviewwindow.h"
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -16,6 +17,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    QTimer *previewPaneUpdateTimer;
 
 private slots:
     void on_previewAnimationButton_clicked();
@@ -31,6 +34,10 @@ private slots:
     void addCurrentColorToPalette();
     void setColorFromPalette(int, int);
     void clearPalette();
+
+    //preview pane slots
+    void nextFrame();
+    void on_previewFpsSlider_valueChanged(int value);
 
 private:
     int rgb[3] = { 0 };

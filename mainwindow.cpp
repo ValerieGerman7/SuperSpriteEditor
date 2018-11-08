@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     updateToolColor(rgb);
+    previewPaneUpdateTimer = new QTimer(this);
+    previewPaneUpdateTimer->start(1000 / ui->previewFpsSlider->value());
 
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
@@ -27,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
+    
+    //previewpane signals and slots
+    connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
 }
 
 MainWindow::~MainWindow()
@@ -138,8 +143,44 @@ void MainWindow::setUseFill() {
     ui->drawButton->setChecked(false);
 }
 
+/**
+ * @brief MainWindow::nextFrame
+ * Slot method that updates the previewPane to display the next sprite frame. If the fullscreen window is open
+ * it will also be updated.
+ *
+ * As a consequence of both panes being updated through this method they share the same timer, therefore a change
+ * caused by the fps slider in the main window will cause the fullscreen animation's fps to change as well.
+ */
+void MainWindow::nextFrame() {
+    //get next pixmap
 
+    QPixmap testPixmap("://images/black48p.png");
+    ui->previewPane->setPixmap(testPixmap);
+    ui->previewPane->repaint();
+
+    if(animationPreviewWindow.isVisible()){
+        animationPreviewWindow.nextFrame(testPixmap);
+    }
+}
 void MainWindow::on_quitButton_clicked()
 {
     close();
+}
+
+/**
+ * @brief MainWindow::on_previewFpsSlider_valueChanged
+ * @param value
+ * Slot method that detects a change in the fps slider for the preview pane, and changes the interval
+ * for the next frame transition accordingly.
+ *
+ * While the fps slider's value is 0 the preview pane will cease to update.
+ */
+void MainWindow::on_previewFpsSlider_valueChanged(int value)
+{
+    if(value > 0) {
+        previewPaneUpdateTimer->start(1000 / value);
+    }
+    else {
+      previewPaneUpdateTimer->stop();
+    }
 }

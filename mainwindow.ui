@@ -47,7 +47,7 @@
         <x>0</x>
         <y>0</y>
         <width>231</width>
-        <height>75</height>
+        <height>69</height>
        </rect>
       </property>
       <attribute name="label">
@@ -118,7 +118,7 @@
         <x>0</x>
         <y>0</y>
         <width>231</width>
-        <height>75</height>
+        <height>69</height>
        </rect>
       </property>
       <attribute name="label">
@@ -243,8 +243,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>79</width>
-       <height>466</height>
+       <width>78</width>
+       <height>474</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -444,6 +444,25 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QLabel" name="previewPane">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>128</width>
+       <height>128</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="resources.qrc">:/background</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QSlider" name="previewFpsSlider">
     <property name="geometry">
@@ -453,6 +472,12 @@
       <width>131</width>
       <height>16</height>
      </rect>
+    </property>
+    <property name="maximum">
+     <number>30</number>
+    </property>
+    <property name="value">
+     <number>10</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -884,7 +909,7 @@ border: 2px solid #000000;</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -907,6 +932,8 @@ border: 2px solid #000000;</string>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

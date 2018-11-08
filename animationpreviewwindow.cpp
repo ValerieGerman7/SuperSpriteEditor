@@ -17,3 +17,13 @@ void AnimationPreviewWindow::on_closeButton_clicked()
 {
     hide();
 }
+
+/**
+ * @brief AnimationPreviewWindow::nextFrame
+ * @param value
+ * Method that updates the preview pane to display the next sprite frame in the animation.
+ */
+void AnimationPreviewWindow::nextFrame(QPixmap pixmap) {
+    ui->previewPane->setPixmap(pixmap);
+    ui->previewPane->repaint();
+}
