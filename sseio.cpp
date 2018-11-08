@@ -1,6 +1,11 @@
 #include "sseio.h"
+#include "spriteframe.h"
 #include <fstream>
+#include <iterator>
+#include <vector>
 #include <QImage>
+
+#include <iostream>
 
 SSEIO::SSEIO() {
 
@@ -31,39 +36,50 @@ SSEIO::SSEIO() {
  * @param sprite the Animation object to save
  * @param path the filename used to save the file
  */
-void SSEIO::save(Animation& sprite, std::string path) {
+void SSEIO::save(Animation& sprite, QString path) {
     //---Comments are pseudocode and will be removed upon implementation---
-    if(sprite.frames.empty()) {
-        return;
-    }
+
     //append .ssp to the path if it does not already exist
-
+    //open outfile
     std::ofstream outfile;
-    QImage image = sprite.frames.at(0).getImage();
-    const int SPRITE_HEIGHT = image.height();
-    const int SPRITE_WIDTH = image.width();
+    outfile.open(path.toStdString());
+    if(outfile.is_open()) {
 
-    //get the sprite's dimensions and use them for "[height] [width]\n"
-    //use sprite.frames.size() for "[num_frames]\n"
+        std::vector<SpriteFrame>::iterator frameIterator;
+        frameIterator = sprite.frames.begin();
 
-    //loop over each frame to write its data to the save file
-    for(SpriteFrame frame : sprite.frames) {
-        //obtain the QImage as QPixmap does not allow pixel access
-        image = frame.getImage();
-        //iterate over all the pixels in the frame and write them to the .ssp file
-        for(int i = 0; i < SPRITE_HEIGHT; i++) {
-            for(int j = 0; j < SPRITE_WIDTH; j++) {
-                //write "[r] [g] [b] [a] [r] [g] [b] [a] ..." to file pixel by pixel
-                //add a \n newline after the RGBA tuple instead of a space for the last pixel in a row
+        if(frameIterator == sprite.frames.end()) {
+            return;
+        }
 
-                if(j == SPRITE_WIDTH) {
-                    //add \n newline
-                }
-                else {
-                    //add " " space
+        const size_t NUM_FRAMES = sprite.frames.size();
+        const int SPRITE_HEIGHT = (*frameIterator).getPixMap().height();
+        const int SPRITE_WIDTH = (*frameIterator).getPixMap().width();
+
+        outfile << SPRITE_HEIGHT << ' ' << SPRITE_WIDTH << std::endl;
+        outfile << NUM_FRAMES << std::endl;
+
+        QImage image;
+        QColor pixel;
+
+        while(frameIterator < sprite.frames.end()) {
+            image = (*frameIterator).getImage();
+            //send frame image's pixel data, row by row, to outfile
+            for(int row = 0; row < SPRITE_HEIGHT; row++) {
+                for(int col = 0; col < SPRITE_WIDTH; col++) {
+                    pixel = image.pixel(col,row);
+                    outfile << pixel.red() << ' ' << pixel.green() << ' ' << pixel.blue() << ' ' << pixel.alpha();
+                    if(col == SPRITE_WIDTH - 1) {
+                        outfile << std::endl;
+                    }
+                    else {
+                        outfile << ' ';
+                    }
                 }
             }
+            frameIterator++;
         }
+        outfile.close();
     }
 }
 
@@ -72,8 +88,30 @@ void SSEIO::save(Animation& sprite, std::string path) {
  * Load a sprite from an .ssp-formatted file
  * @param path the filename to load the sprite from
  */
-Animation& SSEIO::load(std::string path) {
-    Animation anim;
+Animation* SSEIO::load(QString path) {
+    Animation *anim = new Animation();
+    SpriteFrame frame;
+    std::ifstream infile;
+    std::string line;
+    int SPRITE_HEIGHT;
+    int SPRITE_WIDTH;
+    int NUM_FRAMES;
+
+    std::cout << "Load is running" << std::endl;
+
+    infile.open(path.toStdString());
+    if(infile.is_open()) {
+        //special case - first line: "[height] [width]\n"
+        std::getline(infile,line);
+        size_t delimiterIndex = line.find(' ');
+        SPRITE_HEIGHT = std::stoi(line.substr(0,delimiterIndex));
+        SPRITE_WIDTH = std::stoi(line.substr(delimiterIndex + 1,line.length() - delimiterIndex));
+        //special case - second line: "[num_frames]\n"
+        std::getline(infile,line);
+        NUM_FRAMES = std::stoi(line);
+
+        infile.close();
+    }
 
     return anim;
 }
@@ -81,3 +119,5 @@ Animation& SSEIO::load(std::string path) {
 void SSEIO::exportGif() {
 
 }
+
+

@@ -33,7 +33,8 @@ SOURCES += \
     animation.cpp \
     animationtimeline.cpp \
     sseio.cpp \
-    drawingtools.cpp
+    drawingtools.cpp \
+    spritemodel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     animation.h \
     animationtimeline.h \
     sseio.h \
-    drawingtools.h
+    drawingtools.h \
+    spritemodel.h
 
 FORMS += \
         mainwindow.ui \

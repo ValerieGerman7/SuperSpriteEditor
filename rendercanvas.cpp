@@ -13,8 +13,8 @@ using namespace std;
  */
 RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
-	//currentFrame().load("://drhenrykillinger");
-	currentFrame().load("://images/black48p.png");
+//    currentFrame().load("://drhenrykillinger");
+//	currentFrame().load("://images/black48p.png");
 	transparentBackground.load("://background");
 
 }
@@ -32,6 +32,10 @@ void RenderCanvas::paintEvent(QPaintEvent */*event*/) {
 	paintImage(painter);
 }
 
+void RenderCanvas::setModel(SpriteModel& newModel) {
+    model = &newModel;
+}
+
 /**
  * @brief RenderCanvas::currentFrame
  * Used to route references of the current frame through one spot,
@@ -39,8 +43,7 @@ void RenderCanvas::paintEvent(QPaintEvent */*event*/) {
  * @return
  */
 SpriteFrame& RenderCanvas::currentFrame() {
-	// Temp member that should be replaced by a reference to the currently displayed frame within the model.
-	return frame;
+    return model->getCurrentFrame();
 }
 
 /**
@@ -106,7 +109,7 @@ void RenderCanvas::paintImage(QPainter& painter) {
 
 	QSize scaledSize = getScaledImageSize();
 
-	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), frame.getPixMap());
+    painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), currentFrame().getPixMap());
 }
 
 /**
@@ -114,8 +117,8 @@ void RenderCanvas::paintImage(QPainter& painter) {
  * @return Calculates and returns the current frames size in pixels scaled by the current scale
  */
 QSize RenderCanvas::getScaledImageSize() {
-	int newWidth = scaledInt(frame.width());
-	int newHeight = scaledInt(frame.height());
+    int newWidth = scaledInt(currentFrame().width());
+    int newHeight = scaledInt(currentFrame().height());
 	return QSize(newWidth, newHeight);
 }
 
@@ -147,7 +150,7 @@ void RenderCanvas::mousePressEvent(QMouseEvent *event) {
 		drawing = true;
 		QPoint imagePoint;
 		if ( canvasPointToImagePoint(event->pos(), imagePoint ) ) {
-			QImage& image = frame.getImage();
+            QImage& image = currentFrame().getImage();
 			DrawingTools::useCurrentTool(image, imagePoint);
 			repaint();
 		}
@@ -187,11 +190,13 @@ void RenderCanvas::mouseMoveEvent(QMouseEvent *event) {
 		QPoint imagePoint;
 		if ( canvasPointToImagePoint(event->pos(), imagePoint ) ) {
 //			cout << imagePoint.x() << " " << imagePoint.y() << endl;
-			QImage& image = frame.getImage();
+            QImage& image = currentFrame().getImage();
 
 //			image.setPixelColor(imagePoint, toolColor );
 			DrawingTools::useCurrentTool(image, imagePoint);
-			repaint();
+            //repaint();
+            // firing a frame change signal will repaint the canvas already
+            model->notifyOfFrameChange();
 		}
 
 	}

@@ -201,7 +201,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>490</y>
+      <y>530</y>
       <width>110</width>
       <height>41</height>
      </rect>
@@ -247,7 +247,7 @@
        <x>0</x>
        <y>0</y>
        <width>78</width>
-       <height>429</height>
+       <height>474</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -302,9 +302,9 @@
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>220</y>
+      <y>370</y>
       <width>128</width>
-      <height>261</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -327,7 +327,7 @@
 (Actual Size)</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="saveSpriteButton">
+    <widget class="QPushButton" name="resizeSpriteButton">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -337,47 +337,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Save</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="loadSpriteButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>110</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Load</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="resizeSpriteButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>210</y>
-       <width>110</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
       <string>Resize</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="exportGifButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>110</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Export
-to GIF</string>
      </property>
     </widget>
    </widget>
@@ -711,6 +671,17 @@ border: 2px solid #000000;</string>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+    <addaction name="actionLoad"/>
+    <addaction name="actionExportGIF"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -721,6 +692,29 @@ border: 2px solid #000000;</string>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load...</string>
+   </property>
+  </action>
+  <action name="actionExportGIF">
+   <property name="text">
+    <string>Export GIF...</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
