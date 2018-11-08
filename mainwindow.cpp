@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "drawingtools.h"
+#include "sseio.h"
 #include <QDebug>
 #include <sstream>
 #include <iomanip>
 #include <string>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(SSEIO* io, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -27,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
+    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
+    connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 }
 
 MainWindow::~MainWindow()
@@ -138,8 +142,26 @@ void MainWindow::setUseFill() {
     ui->drawButton->setChecked(false);
 }
 
+void MainWindow::saveToFile() {
+    Animation anim; //placeholder default Animation object
+    QString saveFileName = fileDialog.getSaveFileName(this,
+        tr("Save As .ssp"), "",
+        tr("Sprite Sheet Project (*.ssp)"));
+
+}
+
+void MainWindow::loadFromFile() {
+    QString loadFileName = fileDialog.getOpenFileName(this,
+        tr("Open .ssp File"), "",
+        tr("Sprite Sheet Project (*.ssp)"));
+
+}
+
+void MainWindow::quit() {
+    close();
+}
 
 void MainWindow::on_quitButton_clicked()
 {
-    close();
+    quit();
 }
