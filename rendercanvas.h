@@ -2,6 +2,7 @@
 #define RENDERCANVAS_H
 
 #include "spriteframe.h"
+#include "spritemodel.h"
 
 #include <QWidget>
 #include <QPainter>
@@ -53,7 +54,9 @@ private:
 	 * @brief frame
 	 * Temp member that should be replaced by a reference to the currently displayed frame within the model.
 	 */
-	SpriteFrame frame;
+//	SpriteFrame frame;
+
+    SpriteModel *model;
 
 	/**
 	 * @brief transparentBackground
@@ -106,11 +109,14 @@ public:
 
 	QRect getImageBounds();
 
+    void setModel(SpriteModel&);
+
 
 // Private Methods
 private:
 
 	SpriteFrame& currentFrame();
+
 
 	void paintBackground(QPainter&);
 
@@ -125,7 +131,7 @@ private:
 
 //Qt override methods
 public:
-	explicit RenderCanvas(QWidget *parent = nullptr);
+    explicit RenderCanvas( QWidget *parent = nullptr);
 
 protected:
 

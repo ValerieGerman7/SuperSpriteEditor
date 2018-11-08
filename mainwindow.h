@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 #include <string>
 #include "animationpreviewwindow.h"
-#include <QTimer>
+#include "spritemodel.h"
+#include "animationtimeline.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,10 +17,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow( SpriteModel& model, QWidget *parent = nullptr);
     ~MainWindow();
-
-    QTimer *previewPaneUpdateTimer;
 
 private slots:
     void on_previewAnimationButton_clicked();
@@ -35,19 +35,25 @@ private slots:
     void setColorFromPalette(int, int);
     void clearPalette();
 
-    //preview pane slots
-    void nextFrame();
-    void on_previewFpsSlider_valueChanged(int value);
+    // IO slots
+    void saveToFile();
+    void loadFromFile();
+
+    void quit();
 
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
+    QFileDialog fileDialog;
+
+    SpriteModel *model;
+
+    AnimationTimeline* timeline;
 
     std::string getCurrentHexColor();
     void updateToolColor(int[3]);
-
 };
 
 #endif // MAINWINDOW_H

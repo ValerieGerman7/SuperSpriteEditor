@@ -8,8 +8,9 @@ class SSEIO {
 public:
 
     SSEIO();
-    void save(Animation& sprite, std::string path);
-    Animation& load(std::string path);
+
+    void save(Animation& sprite, QString path);
+    Animation* load(QString path);
     void exportGif();
 
 private:

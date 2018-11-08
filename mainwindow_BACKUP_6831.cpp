@@ -6,7 +6,6 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
-#include <QObject>
 
 MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     QMainWindow(parent),
@@ -28,7 +27,6 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->redSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
-
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
@@ -48,19 +46,15 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
             &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
     connect(ui->rotateRightButton, &QPushButton::pressed,
             &model, &SpriteModel::rotateCurrentFrameClockWise );
-
+            
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 }
 
-    timeline = new AnimationTimeline(ui->verticalLayout);
-
-}
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete timeline;
 }
 
 void MainWindow::on_previewAnimationButton_clicked()
