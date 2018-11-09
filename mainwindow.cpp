@@ -14,6 +14,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 {
     ui->setupUi(this);
     updateToolColor(rgb);
+    previewPaneUpdateTimer = new QTimer(this);
+    previewPaneUpdateTimer->start(10000 / ui->previewFpsSlider->value());
 
     this->model = &model;
 
@@ -53,9 +55,11 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 
+    //previewpane signals and slots
+    connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
+
     timeline = new AnimationTimeline(ui->verticalLayout);
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -168,21 +172,39 @@ void MainWindow::setUseFill() {
 }
 
 void MainWindow::saveToFile() {
-    SSEIO io; //placeholder default io object
-//    Animation anim; //placeholder default Animation object
+    QString filter = "Sprite Sheet Project (*.ssp)";
     QString saveFileName = fileDialog.getSaveFileName(this,
         tr("Save As .ssp"), "",
-        tr("Sprite Sheet Project (*.ssp)"));
-    io.save(model->getAnimation(),saveFileName);
+        filter, &filter);
+
+    if(saveFileName.isEmpty() || saveFileName.isNull()) {
+        return; //user clicked cancel
+    }
+
+    size_t saveFileLength = saveFileName.length();
+    if(saveFileLength < 5) {
+        saveFileName += ".ssp";
+    }
+    else if((saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) != ".ssp")) {
+        saveFileName += ".ssp";
+    }
+
+    saveFileLength = saveFileName.length();
+    std::cout << saveFileName.toStdString() << std::endl;
+    std::cout << saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) << std::endl;
+    std::cout << (saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) == ".ssp") << std::endl;
+
+    model->io.save(model->getAnimation(),saveFileName);
 }
 
 void MainWindow::loadFromFile() {
-    SSEIO io; //paceholder default io object
     QString loadFileName = fileDialog.getOpenFileName(this,
         tr("Open .ssp File"), "",
         tr("Sprite Sheet Project (*.ssp)"));
-    auto animation = io.load(loadFileName);
-    model->setAnimation(animation);
+    if(loadFileName.isEmpty() || loadFileName.isNull()) {
+        return;
+    }
+    model->setAnimation(model->io.load(loadFileName));
 }
 
 void MainWindow::quit() {
@@ -192,4 +214,26 @@ void MainWindow::quit() {
 void MainWindow::on_quitButton_clicked()
 {
     quit();
+}
+
+void MainWindow::nextFrame(){
+    //get next pixmap
+
+    QPixmap testPixmap("://images/black48p.png");
+    ui->previewPane->setPixmap(testPixmap);
+    ui->previewPane->repaint();
+
+    if(animationPreviewWindow.isVisible()){
+        animationPreviewWindow.nextFrame(testPixmap);
+    }
+}
+
+void MainWindow::on_previewFpsSlider_valueChanged(int value)
+{
+    if(value > 0) {
+        previewPaneUpdateTimer->start(10000 / value);
+    }
+    else {
+      previewPaneUpdateTimer->stop();
+    }
 }
