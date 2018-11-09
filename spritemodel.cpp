@@ -11,8 +11,8 @@ Animation& SpriteModel::getAnimation() {
     return animation;
 }
 
-void SpriteModel::setAnimation(Animation* anim){
-    animation = *anim;
+void SpriteModel::setAnimation(Animation anim){
+    animation = anim;
     currentIndex = 0;
     notifyOfFrameChange();
 }

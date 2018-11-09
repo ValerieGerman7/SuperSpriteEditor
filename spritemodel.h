@@ -20,7 +20,7 @@ public:
 
     Animation& getAnimation();
 
-    void setAnimation(Animation*);
+    void setAnimation(Animation);
 
     void setCurrentFrame(int);
 

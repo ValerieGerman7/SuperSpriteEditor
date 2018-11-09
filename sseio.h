@@ -10,7 +10,7 @@ public:
     SSEIO();
 
     void save(Animation& sprite, QString path);
-    Animation* load(QString path);
+    Animation load(QString path);
     void exportGif();
 
 private:

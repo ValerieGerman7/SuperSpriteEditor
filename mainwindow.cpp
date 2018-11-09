@@ -204,7 +204,10 @@ void MainWindow::loadFromFile() {
     if(loadFileName.isEmpty() || loadFileName.isNull()) {
         return;
     }
-    model->setAnimation(model->io.load(loadFileName));
+    Animation anim = model->io.load(loadFileName);
+
+    std::cout << "Expecting 57: " << anim.getFrame(0).getImage().pixelColor(138,253).red() << std::endl;
+    model->setAnimation(anim);
 }
 
 void MainWindow::quit() {

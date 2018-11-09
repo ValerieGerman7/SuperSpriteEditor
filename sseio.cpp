@@ -88,8 +88,9 @@ void SSEIO::save(Animation& sprite, QString path) {
  * Load a sprite from an .ssp-formatted file
  * @param path the filename to load the sprite from
  */
-Animation* SSEIO::load(QString path) {
-    Animation *anim = new Animation();
+Animation SSEIO::load(QString path) {
+    Animation anim;
+    SpriteFrame currentFrame;
     QColor pixel;
     std::ifstream infile;
     std::string token;
@@ -107,10 +108,11 @@ Animation* SSEIO::load(QString path) {
         //special case - second line: "[num_frames]\n"
         infile >> token;
         NUM_FRAMES = std::stoi(token);
+        QSize spriteSize(SPRITE_WIDTH,SPRITE_HEIGHT);
+        QImage image(spriteSize,QImage::Format_ARGB32);
 
         for(int frameNum = 0; frameNum < NUM_FRAMES; frameNum++) {
-            SpriteFrame currentFrame;
-            QImage image(QSize(SPRITE_WIDTH,SPRITE_HEIGHT),QImage::Format_ARGB32);
+            std::cout << "Frame: " << frameNum << std::endl;
             for(int yPos = 0; yPos < SPRITE_HEIGHT; yPos++) {
                 for(int xPos = 0; xPos < SPRITE_WIDTH; xPos++) {
                     //get red
@@ -126,10 +128,20 @@ Animation* SSEIO::load(QString path) {
                     infile >> token;
                     pixel.setAlpha(stoi(token));
                     image.setPixelColor(xPos,yPos,pixel);
+                    std::cout << "Pixel at (" << xPos << "," << yPos << "): ";
+                    std::cout << image.pixelColor(xPos,yPos).red() << ' ' << image.pixelColor(xPos,yPos).green() << ' ' << image.pixelColor(xPos,yPos).blue()
+                              << ' ' << image.pixelColor(xPos,yPos).alpha() << std::endl;
                 }
             }
-            (*anim).insertFrame(frameNum,currentFrame);
+            currentFrame.setImage(image);
+            anim.insertFrame(frameNum,currentFrame);
+            std::cout << image.width() << std::endl;
+            std::cout << image.height() << std::endl;
         }
+        std::cout << anim.frames.size() << std::endl;
+        std::cout << anim.frames.at(0).getImage().width() << std::endl;
+        std::cout << anim.frames.at(0).getImage().height() << std::endl;
+
         infile.close();
     }
 
