@@ -45,7 +45,8 @@ HEADERS += \
     animationtimeline.h \
     sseio.h \
     drawingtools.h \
-    spritemodel.h
+    spritemodel.h \
+    gif-h/gif.h
 
 FORMS += \
         mainwindow.ui \

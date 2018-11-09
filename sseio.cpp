@@ -6,7 +6,7 @@
 #include <QImage>
 
 #include <iostream>
-//#include "../gif-h/gif.h"
+#include "gif-h/gif.h"
 
 SSEIO::SSEIO() {
 
@@ -137,8 +137,14 @@ Animation* SSEIO::load(QString path) {
     return anim;
 }
 
+/**
+ * @brief SSEIO::exportGif
+ * Uses the gif.h library to export to gif.
+ * @param anim
+ * @param path
+ */
 void SSEIO::exportGif(Animation &anim, QString path) {
-    /*
+
     GifWriter *writer;
     int WIDTH = anim.getFrame(0).getPixMap().width();
     int HEIGHT = anim.getFrame(0).getPixMap().height();
@@ -151,7 +157,7 @@ void SSEIO::exportGif(Animation &anim, QString path) {
     }
 
     GifEnd(writer);
-    */
+
 }
 
 
