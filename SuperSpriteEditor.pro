@@ -34,7 +34,8 @@ SOURCES += \
     animationtimeline.cpp \
     sseio.cpp \
     drawingtools.cpp \
-    spritemodel.cpp
+    spritemodel.cpp \
+    newspritedialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,11 +46,14 @@ HEADERS += \
     animationtimeline.h \
     sseio.h \
     drawingtools.h \
-    spritemodel.h
+    spritemodel.h \
+    gif-h/gif.h \
+    newspritedialog.h
 
 FORMS += \
         mainwindow.ui \
-    animationpreviewwindow.ui
+    animationpreviewwindow.ui \
+    newspritedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

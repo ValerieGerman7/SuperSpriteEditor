@@ -28,6 +28,7 @@ private slots:
     // tool slots
     void setUsePen();
     void setUseFill();
+	void setUseEraser();
 
     // palette slots
     void colorSliderChanged();
@@ -39,12 +40,15 @@ private slots:
     // IO slots
     void saveToFile();
     void loadFromFile();
+    void exportToGifFile();
 
     void quit();
 
     void nextFrame();
 
     void on_previewFpsSlider_valueChanged(int value);
+
+	void on_actionNew_triggered();
 
 private:
     int rgb[3] = { 0 };
@@ -59,6 +63,8 @@ private:
 
     std::string getCurrentHexColor();
     void updateToolColor(int[3]);
+
+
 };
 
 #endif // MAINWINDOW_H

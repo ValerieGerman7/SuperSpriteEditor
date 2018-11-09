@@ -8,11 +8,29 @@ SpriteFrame::SpriteFrame() {
 }
 
 /**
+ * @brief SpriteFrame::SpriteFrame
+ * Initializes a SpriteFrame object with the given image width and height
+ * @param width
+ * @param height
+ */
+SpriteFrame::SpriteFrame(int width, int height) {
+	// making a blank pixmap is easier than a qimage, so we'll do it in reverse this time
+	pixmap = QPixmap(width, height );
+	pixmapValid = true;
+	image = pixmap.toImage().convertToFormat(QImage::Format_ARGB32);
+
+	_width = image.width();
+	_height = image.height();
+}
+
+
+/**
  * @brief SpriteFrame::load
  * @param path
  */
 void SpriteFrame::load(QString path ) {
 	image.load(path);
+	image = image.convertToFormat(QImage::Format_ARGB32);
 
 	_width = image.width();
 	_height = image.height();
@@ -31,7 +49,7 @@ QImage& SpriteFrame::getImage() {
 }
 
 void SpriteFrame::setImage(QImage& newImage) {
-    image =newImage;
+	image = newImage.convertToFormat(QImage::Format_ARGB32);
     invalidatePixmap();
 }
 

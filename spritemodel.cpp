@@ -1,4 +1,5 @@
 #include "spritemodel.h"
+#include <iostream>
 
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
@@ -11,8 +12,8 @@ Animation& SpriteModel::getAnimation() {
     return animation;
 }
 
-void SpriteModel::setAnimation(Animation* anim){
-    animation = *anim;
+void SpriteModel::setAnimation(Animation anim){
+    animation = anim;
     currentIndex = 0;
     notifyOfFrameChange();
 }
@@ -70,3 +71,7 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
     notifyOfFrameChange();
 }
 
+void SpriteModel::createNewAnimation(int width, int height) {
+	auto animation = Animation(width, height);
+	setAnimation(animation);
+}

@@ -47,14 +47,10 @@ private:
 	 */
 	const float maxScale = 20;
 
+	const QColor backgroundColor = QColor(50,50,50);
+
 // Private members
 private:
-
-	/**
-	 * @brief frame
-	 * Temp member that should be replaced by a reference to the currently displayed frame within the model.
-	 */
-//	SpriteFrame frame;
 
     SpriteModel *model;
 
@@ -111,12 +107,14 @@ public:
 
     void setModel(SpriteModel&);
 
+	void fitImageToFrame();
 
 // Private Methods
 private:
 
 	SpriteFrame& currentFrame();
 
+	void paintGreyWorkspace(QPainter&);
 
 	void paintBackground(QPainter&);
 
