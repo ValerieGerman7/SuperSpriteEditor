@@ -11,7 +11,7 @@ public:
 
     void save(Animation& sprite, QString path);
     Animation* load(QString path);
-    void exportGif();
+    void exportGif(Animation& anim, QString path);
 
 private:
 
