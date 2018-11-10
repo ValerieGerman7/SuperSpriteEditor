@@ -15,6 +15,8 @@ public:
 	Animation(int,int);
 
     int length();
+    int width;
+    int height;
 
     void insertFrame(int index, SpriteFrame frame = SpriteFrame());
     void removeFrame(int index);

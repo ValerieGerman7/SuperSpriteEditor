@@ -3,6 +3,8 @@
 
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
+    //Default size
+    animation = Animation(300,300);
     SpriteFrame newFrame;
     newFrame.load("://drhenrykillinger");
     animation.insertFrame(0, newFrame);

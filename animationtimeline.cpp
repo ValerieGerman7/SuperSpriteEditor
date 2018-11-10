@@ -1,11 +1,23 @@
 #include "animationtimeline.h"
 
 AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QObject *parent)
-    : timelineLayout(layout), model(model)
+    : timelineLayout(layout), model(&model)
 {
-    //Add the first frame
-    addNewBlankFrame();
-    setButtonIcon(0); //Set icon
+    //Set up the first frame
+    QPushButton *frameButton = new QPushButton;
+    frameButton->setText("first");
+    tempAddingCounter++;
+    frameButton->setFixedWidth(buttonSize);
+    frameButton->setFixedHeight(buttonSize);
+    //Set icon
+    setButtonIcon(0);
+    //Add new frame
+    frameButtons.push_back(frameButton);
+    QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
+    timelineLayout->addWidget(frameButton, Qt::AlignTop);
+    frameButton->show();
+
+    //Select new frame
     emit setSelectedFrame(0);
 
     QPushButton *plusButton = new QPushButton;
@@ -38,48 +50,22 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     tempAddingCounter++;
 
     //Add frame to animation
-    size_t newFrameIndex = model.getAnimation().length();
-    model.getAnimation().insertFrame(newFrameIndex, newFrame);
-
-    //Set in animation object
-    setButtonIcon(newFrameIndex);
+    size_t newFrameIndex = model->getAnimation().length();
+    model->getAnimation().insertFrame(newFrameIndex, newFrame);
 
     frameButton->setFixedWidth(buttonSize);
     frameButton->setFixedHeight(buttonSize);
 
+    //Set in animation object
+    setButtonIcon(newFrameIndex);
+
     //Add new frame
-    frameButtons.push_back(frameButton);
+    frameButtons.insert(frameButtons.begin()+(newFrameIndex-1), frameButton);
+
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
 
     timelineLayout->insertWidget(newFrameIndex-1, frameButton, Qt::AlignTop);
-    //timelineLayout->addWidget(frameButton, 0, Qt::AlignTop);
     frameButton->show();
-
-    /*
-    //Remove plus (if frames on list)
-    size_t index = newFrameIndex;
-    QPushButton* plusButton;
-    bool removePlus = newFrameIndex > 1;
-    if(removePlus){
-        plusButton = frameButtons.at(index);
-        plusButton->setText("+");
-        frameButtons.pop_back();
-        timelineLayout->removeWidget(plusButton);
-    }
-
-    //Add new frame
-    frameButtons.push_back(frameButton);
-    QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
-
-    timelineLayout->addWidget(frameButton, 0, Qt::AlignTop);
-    frameButton->show();
-
-    if(removePlus){
-        //Add back plus
-        frameButtons.push_back(plusButton);
-        timelineLayout->addWidget(plusButton);
-    }
-    */
 
     //Select new frame
     emit setSelectedFrame(newFrameIndex);
@@ -111,21 +97,25 @@ void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
  * image in the animation object.
  * @param index
  */
-void AnimationTimeline::setButtonIcon(size_t index){/*
-    if(index < 0 || index >= model->getAnimation().length()){
-        return; //Invalid index
-    }
-    SpriteFrame frame = model->getAnimation().getFrame(index);
+void AnimationTimeline::setButtonIcon(size_t index){
+    //Animation ani = emit getAnimation();
+
+    SpriteFrame frame = model->getFrame(index);
+
+    //Animation anim = model->getAnimation();
+    //SpriteFrame frame2 = anim.getFrame(0);
+
     QPixmap pix = frame.getPixMap();
     QIcon ButtonIcon(pix);
-    frameButtons[index]->setIcon(ButtonIcon);*/
+    //frameButtons[index]->setIcon(ButtonIcon);
+
 }
 
 /**
  * @brief Add a new blank frame to this animation.
  */
 void AnimationTimeline::addNewBlankFrame(){
-    SpriteFrame newFrame;
+    SpriteFrame newFrame(model->getAnimation().width, model->getAnimation().height);
     addNewFrame(newFrame);
 }
 

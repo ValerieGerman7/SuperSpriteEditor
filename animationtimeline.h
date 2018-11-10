@@ -28,7 +28,7 @@ public:
 private:
     QVBoxLayout* timelineLayout;
 
-    SpriteModel& model;
+    SpriteModel* model;
 
     int buttonSize = 40;
 
