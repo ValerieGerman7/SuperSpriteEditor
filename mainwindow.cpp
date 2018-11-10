@@ -222,7 +222,7 @@ void MainWindow::exportToGifFile(){
     fileNameLength = fileName.length();
 
 
-    model->io.exportToGIF(model->getAnimation(), fileName);
+    model->io.exportToGif(model->getAnimation(), fileName);
 }
 
 void MainWindow::quit() {

@@ -137,7 +137,7 @@ void SSEIO::exportToGif(Animation &anim, QString path) {
 
 
     for (int i = 0; i < anim.length(); i++){
-        uchar *bits = anim.getFrame(i).getImage().bits();
+        const uchar *bits = anim.getFrame(i).getImage().constBits();
         GifWriteFrame(writer, bits, WIDTH, HEIGHT, 0);
     }
 
