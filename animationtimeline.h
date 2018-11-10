@@ -13,7 +13,7 @@ class AnimationTimeline : public QObject {
 
 public:
 
-    AnimationTimeline(QVBoxLayout*, SpriteModel*, QObject *parent = nullptr);
+    AnimationTimeline(QVBoxLayout*, SpriteModel&, QObject *parent = nullptr);
 
     ~AnimationTimeline();
 
@@ -28,7 +28,7 @@ public:
 private:
     QVBoxLayout* timelineLayout;
 
-    SpriteModel* model;
+    SpriteModel& model;
 
     int buttonSize = 40;
 
@@ -47,6 +47,7 @@ public slots:
 
 signals:
     void setSelectedFrame(int index);
+    Animation getAnimation();
 
 };
 

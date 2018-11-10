@@ -12,14 +12,6 @@ Animation& SpriteModel::getAnimation() {
     return animation;
 }
 
-/**
- * @brief Get a pointer to this spritemodel's animation object
- * @return
- */
-Animation SpriteModel::getAnimationPointer(){
-    return animation;
-}
-
 void SpriteModel::setAnimation(Animation anim){
     animation = anim;
     currentIndex = 0;
@@ -82,4 +74,12 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
 void SpriteModel::createNewAnimation(int width, int height) {
 	auto animation = Animation(width, height);
 	setAnimation(animation);
+}
+
+/**
+ * @brief Returns the animation object
+ * @return
+ */
+Animation& SpriteModel::getAnimationSlot(){
+    return animation;
 }

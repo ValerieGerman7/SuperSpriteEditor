@@ -20,8 +20,6 @@ public:
 
     Animation& getAnimation();
 
-    Animation getAnimationPointer();
-
     void setAnimation(Animation);
 
     SpriteFrame& getCurrentFrame();
@@ -49,6 +47,7 @@ signals:
 
 public slots:
     void setCurrentFrame(int);
+    Animation& getAnimationSlot();
 
 };
 

@@ -1,11 +1,11 @@
 #include "animationtimeline.h"
 
-AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel* model, QObject *parent)
+AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QObject *parent)
     : timelineLayout(layout), model(model)
 {
     //Add the first frame
-    addNewBlankFrame();
-    /*setButtonIcon(0); //Set icon
+    addNewBlankFrame();/*
+    setButtonIcon(0); //Set icon
     emit setSelectedFrame(0);
 
     QPushButton *plusButton = new QPushButton;
@@ -38,8 +38,11 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     tempAddingCounter++;
 
     //Add frame to animation
-    size_t newFrameIndex = model->getAnimation().length();
-    model->getAnimation().insertFrame(newFrameIndex, newFrame);
+    size_t newFrameIndex = model.getAnimation().length();
+    //Animation animationObject = emit getAnimation();
+    //animationObject.insertFrame(newFrameIndex, newFrame);
+    model.getAnimation().insertFrame(newFrameIndex, newFrame);
+
     //Set in animation object
     setButtonIcon(newFrameIndex);
 
@@ -86,7 +89,7 @@ void AnimationTimeline::deleteFrame(int frameIndex){
     frameButtons.erase(frameButtons.begin() + frameIndex);
 
     timelineLayout->removeWidget(remove);
-    //animation->removeFrame(frameIndex);
+    //model->getAnimation().removeFrame(frameIndex);
 
     delete remove;
 }
@@ -100,12 +103,11 @@ void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
  * image in the animation object.
  * @param index
  */
-void AnimationTimeline::setButtonIcon(size_t index){
-    /*
-    if(index < 0 || index >= animation->length()){
+void AnimationTimeline::setButtonIcon(size_t index){/*
+    if(index < 0 || index >= model->getAnimation().length()){
         return; //Invalid index
     }
-    SpriteFrame frame = animation->getFrame(index);
+    SpriteFrame frame = model->getAnimation().getFrame(index);
     QPixmap pix = frame.getPixMap();
     QIcon ButtonIcon(pix);
     frameButtons[index]->setIcon(ButtonIcon);*/
@@ -135,3 +137,4 @@ void AnimationTimeline::selectFrame(){
 
     std::cout << "selecting " << index << std::endl;
 }
+
