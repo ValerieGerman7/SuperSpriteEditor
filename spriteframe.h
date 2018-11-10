@@ -31,7 +31,7 @@ class SpriteFrame {
 		 * The image version of this frame.
 		 * If you plan to manipulate an image, modify it, change pixels on it, etc., use a QImage.
 		 */
-		QImage image;
+        QImage image;
 
 		/**
 		 * @brief pixmapValid

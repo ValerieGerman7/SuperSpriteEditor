@@ -39,6 +39,7 @@ private slots:
     // IO slots
     void saveToFile();
     void loadFromFile();
+    void exportToGifFile();
 
     void quit();
 

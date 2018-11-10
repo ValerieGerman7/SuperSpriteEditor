@@ -18,6 +18,17 @@ SpriteFrame::SpriteFrame(int width, int height) {
 }
 
 /**
+ * @brief SpriteFrame::SpriteFrame
+ * Initializes a SpriteFrame object with the given image width and height
+ * @param width
+ * @param height
+ */
+SpriteFrame::SpriteFrame(int width, int height) {
+    _width = width;
+    _height = height;
+}
+
+/**
  * @brief SpriteFrame::load
  * @param path
  */
@@ -41,7 +52,7 @@ QImage& SpriteFrame::getImage() {
 }
 
 void SpriteFrame::setImage(QImage& newImage) {
-    image =newImage;
+    image = newImage;
     invalidatePixmap();
 }
 

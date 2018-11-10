@@ -54,6 +54,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
+    connect(ui->actionExportGIF, SIGNAL(triggered()), this, SLOT(exportToGifFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 
     //previewpane signals and slots
@@ -191,12 +192,7 @@ void MainWindow::saveToFile() {
     else if((saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) != ".ssp")) {
         saveFileName += ".ssp";
     }
-
     saveFileLength = saveFileName.length();
-    std::cout << saveFileName.toStdString() << std::endl;
-    std::cout << saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) << std::endl;
-    std::cout << (saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) == ".ssp") << std::endl;
-
     model->io.save(model->getAnimation(),saveFileName);
 }
 
@@ -207,10 +203,29 @@ void MainWindow::loadFromFile() {
     if(loadFileName.isEmpty() || loadFileName.isNull()) {
         return;
     }
-    Animation anim = model->io.load(loadFileName);
+    model->setAnimation(model->io.load(loadFileName));
+}
 
-    std::cout << "Expecting 57: " << anim.getFrame(0).getImage().pixelColor(138,253).red() << std::endl;
-    model->setAnimation(anim);
+void MainWindow::exportToGifFile(){
+
+    QString filter = "GIF Files (*.gif)";
+    QString fileName = fileDialog.getSaveFileName(this, tr("Save As .gif"), "",
+                                                  filter, &filter);
+
+    if (fileName.isEmpty() || fileName.isNull()){ return; }
+
+    int fileNameLength = fileName.length();
+    if (fileNameLength < 5){
+        fileName += ".gif";
+    }
+    else if ((fileName.toStdString().substr(fileNameLength - 4, fileNameLength - 1) != ".gif")){
+        fileName += ".gif";
+    }
+
+    fileNameLength = fileName.length();
+
+
+    model->io.exportToGif(model->getAnimation(), fileName);
 }
 
 void MainWindow::quit() {
