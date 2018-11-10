@@ -8,6 +8,17 @@ SpriteFrame::SpriteFrame() {
 }
 
 /**
+ * @brief SpriteFrame::SpriteFrame
+ * Initializes a SpriteFrame object with the given image width and height
+ * @param width
+ * @param height
+ */
+SpriteFrame::SpriteFrame(int width, int height) {
+    _width = width;
+    _height = height;
+}
+
+/**
  * @brief SpriteFrame::load
  * @param path
  */

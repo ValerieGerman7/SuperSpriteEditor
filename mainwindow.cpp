@@ -189,12 +189,7 @@ void MainWindow::saveToFile() {
     else if((saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) != ".ssp")) {
         saveFileName += ".ssp";
     }
-
     saveFileLength = saveFileName.length();
-    std::cout << saveFileName.toStdString() << std::endl;
-    std::cout << saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) << std::endl;
-    std::cout << (saveFileName.toStdString().substr(saveFileLength - 4, saveFileLength - 1) == ".ssp") << std::endl;
-
     model->io.save(model->getAnimation(),saveFileName);
 }
 
@@ -205,10 +200,7 @@ void MainWindow::loadFromFile() {
     if(loadFileName.isEmpty() || loadFileName.isNull()) {
         return;
     }
-    Animation anim = model->io.load(loadFileName);
-
-    std::cout << "Expecting 57: " << anim.getFrame(0).getImage().pixelColor(138,253).red() << std::endl;
-    model->setAnimation(anim);
+    model->setAnimation(model->io.load(loadFileName));
 }
 
 void MainWindow::exportToGifFile(){

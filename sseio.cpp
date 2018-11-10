@@ -12,25 +12,6 @@ SSEIO::SSEIO() {
 
 }
 
-/*
- * ---Overall Format----
-[height] [width]\n
-[num_frames]\n
-[frame_0]\n
-[frame_1]\n
-...
-[frame_n]\n
-
-
-----Single Frame----
-(Separate rows with a newline)
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
-...
-[r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a] [r] [g] [b] [a]... [r] [g] [b] [a]\n
- *
- * */
-
 /**
  * @brief SSEIO::Save
  * Saves a sprite as an .ssp-formatted file
@@ -91,7 +72,6 @@ void SSEIO::save(Animation& sprite, QString path) {
  */
 Animation SSEIO::load(QString path) {
     Animation anim;
-    SpriteFrame currentFrame;
     QColor pixel;
     std::ifstream infile;
     std::string token;
@@ -111,9 +91,9 @@ Animation SSEIO::load(QString path) {
         NUM_FRAMES = std::stoi(token);
         QSize spriteSize(SPRITE_WIDTH,SPRITE_HEIGHT);
         QImage image(spriteSize,QImage::Format_ARGB32);
+        SpriteFrame currentFrame(SPRITE_WIDTH,SPRITE_HEIGHT);
 
         for(int frameNum = 0; frameNum < NUM_FRAMES; frameNum++) {
-            std::cout << "Frame: " << frameNum << std::endl;
             for(int yPos = 0; yPos < SPRITE_HEIGHT; yPos++) {
                 for(int xPos = 0; xPos < SPRITE_WIDTH; xPos++) {
                     //get red
@@ -129,20 +109,11 @@ Animation SSEIO::load(QString path) {
                     infile >> token;
                     pixel.setAlpha(stoi(token));
                     image.setPixelColor(xPos,yPos,pixel);
-                    std::cout << "Pixel at (" << xPos << "," << yPos << "): ";
-                    std::cout << image.pixelColor(xPos,yPos).red() << ' ' << image.pixelColor(xPos,yPos).green() << ' ' << image.pixelColor(xPos,yPos).blue()
-                              << ' ' << image.pixelColor(xPos,yPos).alpha() << std::endl;
                 }
             }
             currentFrame.setImage(image);
             anim.insertFrame(frameNum,currentFrame);
-            std::cout << image.width() << std::endl;
-            std::cout << image.height() << std::endl;
         }
-        std::cout << anim.frames.size() << std::endl;
-        std::cout << anim.frames.at(0).getImage().width() << std::endl;
-        std::cout << anim.frames.at(0).getImage().height() << std::endl;
-
         infile.close();
     }
 
@@ -150,12 +121,12 @@ Animation SSEIO::load(QString path) {
 }
 
 /**
- * @brief SSEIO::exportGif
+ * @brief SSEIO::exportToGif
  * Uses the gif.h library to export to gif.
  * @param anim
  * @param path
  */
-void SSEIO::exportToGIF(Animation &anim, QString path) {
+void SSEIO::exportToGif(Animation &anim, QString path) {
 
     std::string pathAsString = path.toStdString() + "\0";
     GifWriter *writer;
