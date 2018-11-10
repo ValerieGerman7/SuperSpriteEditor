@@ -8,6 +8,7 @@ class Animation
 {
 public:
     std::vector<SpriteFrame> frames;
+    int framesPerSecond = 12;
 
 // Methods
 public:

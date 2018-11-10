@@ -262,6 +262,8 @@ void MainWindow::nextFrame(){
 
 void MainWindow::on_previewFpsSlider_valueChanged(int value)
 {
+    model->getAnimation().framesPerSecond = value;
+
     if(value > 0) {
         previewPaneUpdateTimer->start(10000 / value);
     }
