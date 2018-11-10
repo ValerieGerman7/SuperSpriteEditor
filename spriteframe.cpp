@@ -42,7 +42,7 @@ QImage& SpriteFrame::getImage() {
 }
 
 void SpriteFrame::setImage(QImage& newImage) {
-    image =newImage;
+    image = newImage;
     invalidatePixmap();
 }
 

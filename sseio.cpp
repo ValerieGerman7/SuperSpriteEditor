@@ -7,6 +7,7 @@
 #include <QImage>
 #include <iostream>
 #include <string>
+#include <QDebug>
 
 SSEIO::SSEIO() {
 
@@ -129,19 +130,21 @@ Animation SSEIO::load(QString path) {
 void SSEIO::exportToGif(Animation &anim, QString path) {
 
     std::string pathAsString = path.toStdString() + "\0";
-    GifWriter *writer;
-    int WIDTH = anim.getFrame(0).getPixMap().width();
-    int HEIGHT = anim.getFrame(0).getPixMap().height();
+    GifWriter writer;
+    int WIDTH = anim.getFrame(0).getImage().width();
+    int HEIGHT = anim.getFrame(0).getImage().height();
 
-    GifBegin(writer, &pathAsString[0], WIDTH, HEIGHT, 0);
 
+    GifBegin(&writer, &pathAsString[0], WIDTH, HEIGHT, 100 / 2);
 
     for (int i = 0; i < anim.length(); i++){
-        const uchar *bits = anim.getFrame(i).getImage().constBits();
-        GifWriteFrame(writer, bits, WIDTH, HEIGHT, 0);
+        QImage currentFrame = anim.getFrame(i).getImage().rgbSwapped().convertToFormat(QImage::Format_ARGB32);
+        uchar *bits = currentFrame.bits();
+        QByteArray rgba((char *)bits, currentFrame.sizeInBytes());
+        GifWriteFrame(&writer, (uint8_t *)rgba.data(), currentFrame.width(), currentFrame.height(), 100 / 2);
     }
 
-    GifEnd(writer);
+    GifEnd(&writer);
 
 }
 
