@@ -7,7 +7,7 @@
 class DrawingTools
 {
 public:
-    enum ToolType {PEN, FILL};
+	enum ToolType {PEN, FILL, ERASE};
     static ToolType currentTool;
     static QColor toolColor;
     static void useCurrentTool(QImage&, QPoint&);
@@ -18,6 +18,7 @@ private:
 
     static void usePen(QImage&, QPoint&);
     static void useFill(QImage&, QPoint, QColor&);
+	static void useErase(QImage&, QPoint&);
     static bool isPointInImage(QImage&, QPoint&);
 
 };

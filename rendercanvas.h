@@ -52,12 +52,6 @@ private:
 // Private members
 private:
 
-	/**
-	 * @brief frame
-	 * Temp member that should be replaced by a reference to the currently displayed frame within the model.
-	 */
-//	SpriteFrame frame;
-
     SpriteModel *model;
 
 	/**
@@ -113,6 +107,7 @@ public:
 
     void setModel(SpriteModel&);
 
+	void fitImageToFrame();
 
 // Private Methods
 private:

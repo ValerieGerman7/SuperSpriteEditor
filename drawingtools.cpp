@@ -1,4 +1,5 @@
 #include "drawingtools.h"
+#include <iostream>
 
 QColor DrawingTools::toolColor = QColor(0,0,0);
 DrawingTools::ToolType DrawingTools::currentTool = DrawingTools::PEN;
@@ -12,10 +13,14 @@ void DrawingTools::useCurrentTool(QImage& image, QPoint& imagePoint) {
     case PEN:
         usePen(image, imagePoint);
         break;
-    case FILL:
+	case FILL:{
         QColor targetColor = image.pixelColor(imagePoint);
         useFill(image, imagePoint, targetColor);
+		}
         break;
+	case ERASE:
+		useErase(image, imagePoint);
+		break;
     }
 }
 
@@ -44,6 +49,14 @@ void DrawingTools::useFill(QImage& image, QPoint imagePoint, QColor& target) {
     useFill(image, QPoint(imagePoint.x(), imagePoint.y() - 1), target);
     useFill(image, QPoint(imagePoint.x() - 1, imagePoint.y()), target);
     useFill(image, QPoint(imagePoint.x() + 1, imagePoint.y()), target);
+}
+
+/**
+  * The pen tool simply sets the color of the pixel at this point.
+ */
+void DrawingTools::useErase(QImage& image, QPoint& imagePoint) {
+	image.setPixelColor(imagePoint, QColor(0,0,0,0) );
+	std::cout << "Erase" << std::endl;
 }
 
 /**

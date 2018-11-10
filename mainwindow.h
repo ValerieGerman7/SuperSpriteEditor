@@ -28,6 +28,7 @@ private slots:
     // tool slots
     void setUsePen();
     void setUseFill();
+	void setUseEraser();
 
     // palette slots
     void colorSliderChanged();

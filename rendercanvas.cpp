@@ -75,6 +75,19 @@ bool RenderCanvas::canvasPointToImagePoint(QPoint canvasPoint, QPoint& imagePoin
 }
 
 /**
+ * @brief RenderCanvas::fitImageToFrame
+ * Scales the current spriteframe to fit within the canvas area.
+ */
+void RenderCanvas::fitImageToFrame(){
+	QSize canvasSize = this->size();
+	float xScale = canvasSize.width()/currentFrame().width();
+	float yScale = canvasSize.height()/currentFrame().height();
+	scale = min(xScale,yScale);
+	translation = QPoint(0,0);
+	repaint();
+}
+
+/**
  * @brief getImageBounds
  * Returns the screen rectangle where the current image will be drawn within the canvas area.
  * Uses the current translation and scale.

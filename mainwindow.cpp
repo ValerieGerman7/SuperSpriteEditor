@@ -22,6 +22,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
     connect(ui->fillButton, SIGNAL(pressed()), this, SLOT(setUseFill()));
+	connect(ui->eraseButton, SIGNAL(pressed()), this, SLOT( setUseEraser()));
 
     // palette related signals and slots
     connect(ui->redSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
@@ -40,6 +41,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 	connect(&model, &SpriteModel::currentFrameChanged, ui->renderArea,
             static_cast<void (QWidget::*)()>(&QWidget::repaint));
             // there's a few QWidget.repaint() functions, so cast/force it to the zero parameters one
+	connect(ui->fitSpriteButton, &QPushButton::pressed, ui->renderArea, &RenderCanvas::fitImageToFrame);
 
     // Flip and rotate buttons
     connect(ui->flipHorizontalButton, &QPushButton::pressed,
@@ -51,6 +53,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->rotateRightButton, &QPushButton::pressed,
             &model, &SpriteModel::rotateCurrentFrameClockWise );
 	connect(ui->newSpriteDialog, &NewSpriteDialog::createNewAnimation, &model, &SpriteModel::createNewAnimation );
+
 
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
@@ -168,11 +171,19 @@ void MainWindow::clearPalette() {
 void MainWindow::setUsePen() {
     DrawingTools::currentTool = DrawingTools::PEN;
     ui->fillButton->setChecked(false);
+	ui->eraseButton->setChecked(false);
 }
 
 void MainWindow::setUseFill() {
     DrawingTools::currentTool = DrawingTools::FILL;
     ui->drawButton->setChecked(false);
+	ui->eraseButton->setChecked(false);
+}
+
+void MainWindow::setUseEraser() {
+	DrawingTools::currentTool = DrawingTools::ERASE;
+	ui->fillButton->setChecked(false);
+	ui->drawButton->setChecked(false);
 }
 
 void MainWindow::saveToFile() {
