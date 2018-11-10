@@ -40,6 +40,8 @@ public:
 
     void rotateCurrentFrameAntiClockWise();
 
+	void createNewAnimation(int, int);
+
     SSEIO io;
 
 signals:

@@ -1,5 +1,14 @@
 #include "animation.h"
 
+Animation::Animation() {
+
+}
+
+Animation::Animation(int width,int height ) {
+	auto newFrame = SpriteFrame(width,height);
+	insertFrame(0,newFrame);
+}
+
 /**
  * Inserts the given frame at the given position.
  * If no SpriteFrame object is given, an empty SpriteFrame is added.

@@ -47,6 +47,8 @@ private:
 	 */
 	const float maxScale = 20;
 
+	const QColor backgroundColor = QColor(50,50,50);
+
 // Private members
 private:
 
@@ -117,6 +119,7 @@ private:
 
 	SpriteFrame& currentFrame();
 
+	void paintGreyWorkspace(QPainter&);
 
 	void paintBackground(QPainter&);
 

@@ -46,6 +46,8 @@ private slots:
 
     void on_previewFpsSlider_valueChanged(int value);
 
+	void on_actionNew_triggered();
+
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;
@@ -59,6 +61,8 @@ private:
 
     std::string getCurrentHexColor();
     void updateToolColor(int[3]);
+
+
 };
 
 #endif // MAINWINDOW_H

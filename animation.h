@@ -9,6 +9,11 @@ class Animation
 public:
     std::vector<SpriteFrame> frames;
 
+// Methods
+public:
+	Animation();
+	Animation(int,int);
+
     int length();
 
     void insertFrame(int index, SpriteFrame frame = SpriteFrame());

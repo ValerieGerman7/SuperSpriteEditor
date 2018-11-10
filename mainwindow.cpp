@@ -36,8 +36,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
     // Render canvas
-    ui->renderAreaPlaceHolder->setModel(model); // give the canvas a ref to the model
-    connect(&model, &SpriteModel::currentFrameChanged, ui->renderAreaPlaceHolder,
+	ui->renderArea->setModel(model); // give the canvas a ref to the model
+	connect(&model, &SpriteModel::currentFrameChanged, ui->renderArea,
             static_cast<void (QWidget::*)()>(&QWidget::repaint));
             // there's a few QWidget.repaint() functions, so cast/force it to the zero parameters one
 
@@ -50,6 +50,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
             &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
     connect(ui->rotateRightButton, &QPushButton::pressed,
             &model, &SpriteModel::rotateCurrentFrameClockWise );
+	connect(ui->newSpriteDialog, &NewSpriteDialog::createNewAnimation, &model, &SpriteModel::createNewAnimation );
 
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
     connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(loadFromFile()));
@@ -59,6 +60,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
 
     timeline = new AnimationTimeline(ui->verticalLayout);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -240,3 +243,10 @@ void MainWindow::on_previewFpsSlider_valueChanged(int value)
       previewPaneUpdateTimer->stop();
     }
 }
+
+void MainWindow::on_actionNew_triggered()
+{
+	ui->newSpriteDialog->show();
+}
+
+

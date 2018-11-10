@@ -27,6 +27,8 @@ RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 void RenderCanvas::paintEvent(QPaintEvent */*event*/) {
 	QPainter painter(this);
 
+
+	paintGreyWorkspace(painter);
 	paintBackground(painter);
 
 	paintImage(painter);
@@ -83,22 +85,36 @@ QRect RenderCanvas::getImageBounds() {
 	return QRect( translation.x(), translation.y(), size.width(), size.height() );
 }
 
+/**
+ * @brief paintGreyWorkspace
+ * Draws a grey workspace background across the entire canvas
+ */
+void RenderCanvas::paintGreyWorkspace(QPainter& painter) {
+	QSize canvasSize = this->size();
+	QRect canvasRect( 0,0, canvasSize.width(), canvasSize.height() );
+	painter.fillRect( canvasRect, backgroundColor );
+}
+
 
 /**
  * @brief paintBackground
- * Draws the checkered workspace background across the entire canvas
+ * Draws the checkered workspace background across the sprite area
  */
 void RenderCanvas::paintBackground(QPainter& painter) {
 
-	QSize canvasSize = this->size();
+	QSize scaledSize = getScaledImageSize();
 
-	QSize backgroundSize = transparentBackground.size();
+	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), transparentBackground);
 
-	for( int x = 0; x < canvasSize.width(); x += backgroundSize.width() ) {
-		for( int y = 0; y < canvasSize.height(); y += backgroundSize.height() ) {
-			painter.drawPixmap(x,y,transparentBackground);
-		}
-	}
+//	QSize canvasSize = this->size();
+
+//	QSize backgroundSize = transparentBackground.size();
+
+//	for( int x = 0; x < canvasSize.width(); x += backgroundSize.width() ) {
+//		for( int y = 0; y < canvasSize.height(); y += backgroundSize.height() ) {
+//			painter.drawPixmap(x,y,transparentBackground);
+//		}
+//	}
 }
 
 /**

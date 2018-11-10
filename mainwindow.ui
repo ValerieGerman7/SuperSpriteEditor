@@ -210,7 +210,7 @@
      <string>Quit</string>
     </property>
    </widget>
-   <widget class="RenderCanvas" name="renderAreaPlaceHolder" native="true">
+   <widget class="RenderCanvas" name="renderArea" native="true">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -219,6 +219,16 @@
       <height>512</height>
      </rect>
     </property>
+    <widget class="NewSpriteDialog" name="newSpriteDialog" native="true">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>-30</y>
+       <width>351</width>
+       <height>261</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QScrollArea" name="timelineScrollArea">
     <property name="geometry">
@@ -700,6 +710,7 @@ border: 2px solid #000000;</string>
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionNew"/>
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
     <addaction name="actionExportGIF"/>
@@ -743,6 +754,11 @@ border: 2px solid #000000;</string>
     <string>Quit</string>
    </property>
   </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -750,6 +766,12 @@ border: 2px solid #000000;</string>
    <class>RenderCanvas</class>
    <extends>QWidget</extends>
    <header>rendercanvas.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NewSpriteDialog</class>
+   <extends>QWidget</extends>
+   <header>newspritedialog.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
