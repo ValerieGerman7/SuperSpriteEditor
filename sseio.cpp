@@ -1,12 +1,12 @@
 #include "sseio.h"
 #include "spriteframe.h"
+#include "gif-h/gif.h"
 #include <fstream>
 #include <iterator>
 #include <vector>
 #include <QImage>
-
 #include <iostream>
-#include "gif-h/gif.h"
+#include <string>
 
 SSEIO::SSEIO() {
 
@@ -155,12 +155,14 @@ Animation SSEIO::load(QString path) {
  * @param anim
  * @param path
  */
-void SSEIO::exportGif(Animation &anim, QString path) {
+void SSEIO::exportToGIF(Animation &anim, QString path) {
 
+    std::string pathAsString = path.toStdString() + "\0";
     GifWriter *writer;
     int WIDTH = anim.getFrame(0).getPixMap().width();
     int HEIGHT = anim.getFrame(0).getPixMap().height();
-    GifBegin(writer, "../test.gif", WIDTH, HEIGHT, 0);
+
+    GifBegin(writer, &pathAsString[0], WIDTH, HEIGHT, 0);
 
 
     for (int i = 0; i < anim.length(); i++){
