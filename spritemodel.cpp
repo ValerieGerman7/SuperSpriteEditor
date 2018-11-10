@@ -12,6 +12,14 @@ Animation& SpriteModel::getAnimation() {
     return animation;
 }
 
+/**
+ * @brief Get a pointer to this spritemodel's animation object
+ * @return
+ */
+Animation SpriteModel::getAnimationPointer(){
+    return animation;
+}
+
 void SpriteModel::setAnimation(Animation anim){
     animation = anim;
     currentIndex = 0;

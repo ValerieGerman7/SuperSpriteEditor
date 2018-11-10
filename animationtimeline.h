@@ -2,6 +2,8 @@
 #define ANIMATIONTIMELINE_H
 #include "spriteframe.h"
 #include "QPushButton"
+#include "animation.h"
+#include "spritemodel.h"
 #include <QObject>
 #include <QVBoxLayout>
 #include <iostream>
@@ -11,7 +13,7 @@ class AnimationTimeline : public QObject {
 
 public:
 
-    AnimationTimeline(QVBoxLayout*, QObject *parent = nullptr);
+    AnimationTimeline(QVBoxLayout*, SpriteModel*, QObject *parent = nullptr);
 
     ~AnimationTimeline();
 
@@ -26,17 +28,25 @@ public:
 private:
     QVBoxLayout* timelineLayout;
 
+    SpriteModel* model;
+
+    int buttonSize = 40;
+
     std::vector<QPushButton*> frameButtons;
-    size_t frameCount;
 
     QPushButton* selectedButton;
     int tempAddingCounter = 0;
+
+    void setButtonIcon(size_t index);
 
 
 public slots:
     void addNewBlankFrame();
 
     void selectFrame();
+
+signals:
+    void setSelectedFrame(int index);
 
 };
 

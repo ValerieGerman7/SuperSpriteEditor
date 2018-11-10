@@ -1,11 +1,12 @@
 #include "animationtimeline.h"
 
-AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : timelineLayout(layout)
+AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel* model, QObject *parent)
+    : timelineLayout(layout), model(model)
 {
-    frameCount = 0;
     //Add the first frame
     addNewBlankFrame();
-    //TODO: Set as selected
+    /*setButtonIcon(0); //Set icon
+    emit setSelectedFrame(0);
 
     QPushButton *plusButton = new QPushButton;
     plusButton->setText("+");
@@ -14,13 +15,14 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, QObject *parent) : tim
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
     timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
-    frameCount++;
 
     frameButtons.push_back(plusButton);
+*/
 }
 
 AnimationTimeline::~AnimationTimeline(){
-    for(size_t i = 0; i < frameCount; i++){
+    size_t numFrames = frameButtons.size();
+    for(size_t i = 0; i < numFrames; i++){
         delete frameButtons[i];
     }
 }
@@ -31,18 +33,26 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
 
 void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     QPushButton *frameButton = new QPushButton;
+    //Numbering for testing
     frameButton->setText(QString::number(tempAddingCounter));
     tempAddingCounter++;
-    frameButton->setFixedWidth(30);
-    frameButton->setFixedHeight(30);
+
+    //Add frame to animation
+    size_t newFrameIndex = model->getAnimation().length();
+    model->getAnimation().insertFrame(newFrameIndex, newFrame);
+    //Set in animation object
+    setButtonIcon(newFrameIndex);
+
+    frameButton->setFixedWidth(buttonSize);
+    frameButton->setFixedHeight(buttonSize);
 
     //Remove plus (if frames on list)
-    size_t index = frameCount - 1;
+    size_t index = newFrameIndex;
     QPushButton* plusButton;
-    bool removePlus = frameCount > 1;
+    bool removePlus = newFrameIndex > 1;
     if(removePlus){
         plusButton = frameButtons.at(index);
-        plusButton->setText("++");
+        plusButton->setText("+");
         frameButtons.pop_back();
         timelineLayout->removeWidget(plusButton);
     }
@@ -50,7 +60,6 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     //Add new frame
     frameButtons.push_back(frameButton);
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
-    frameCount++;
 
     timelineLayout->addWidget(frameButton, 0, Qt::AlignTop);
     frameButton->show();
@@ -61,15 +70,24 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
         timelineLayout->addWidget(plusButton);
     }
 
+    //Select new frame
+    emit setSelectedFrame(newFrameIndex);
+
     std::cout<< "adding frame"<<std::endl;
 
 }
 
+/**
+ * @brief Remove the button corresponding to the index, and the frame from the animation.
+ * @param frameIndex
+ */
 void AnimationTimeline::deleteFrame(int frameIndex){
     QPushButton* remove = frameButtons.at(frameIndex);
     frameButtons.erase(frameButtons.begin() + frameIndex);
+
     timelineLayout->removeWidget(remove);
-    frameCount--;
+    //animation->removeFrame(frameIndex);
+
     delete remove;
 }
 
@@ -77,26 +95,43 @@ void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
 
 }
 
+/**
+ * @brief Set the button at the given index 's icon to the corresponding
+ * image in the animation object.
+ * @param index
+ */
+void AnimationTimeline::setButtonIcon(size_t index){
+    /*
+    if(index < 0 || index >= animation->length()){
+        return; //Invalid index
+    }
+    SpriteFrame frame = animation->getFrame(index);
+    QPixmap pix = frame.getPixMap();
+    QIcon ButtonIcon(pix);
+    frameButtons[index]->setIcon(ButtonIcon);*/
+}
+
+/**
+ * @brief Add a new blank frame to this animation.
+ */
 void AnimationTimeline::addNewBlankFrame(){
     SpriteFrame newFrame;
-    std::cout << "blank frame" << std::endl;
     addNewFrame(newFrame);
 }
 
-/* Select the current frame (to change drawing area)
+/**
+ * @brief Select the current frame (to change drawing area)
  * The button's pointer is passed in to identify the frame.
-*/
+ * Emits setSelectedFrame to change which frame is selected inthe drawing
+ * area.
+ */
 void AnimationTimeline::selectFrame(){
     QPushButton* send = qobject_cast<QPushButton*>(sender());
+    selectedButton = send;
 
-    //Find index
-    //size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
-    //verify index?
-    //new selected button
+    size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
 
-    //selectedButton = frameButtons[index];
-    //TODO: change frame on screen, indication on button that it is selected
-    //QString content = selectedButton->text();
-    //std::cout << content << std::endl;
-    std::cout << "test" << std::endl;
+    emit setSelectedFrame(index);
+
+    std::cout << "selecting " << index << std::endl;
 }

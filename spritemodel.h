@@ -20,9 +20,9 @@ public:
 
     Animation& getAnimation();
 
-    void setAnimation(Animation);
+    Animation getAnimationPointer();
 
-    void setCurrentFrame(int);
+    void setAnimation(Animation);
 
     SpriteFrame& getCurrentFrame();
 
@@ -48,6 +48,8 @@ signals:
     void currentFrameChanged();
 
 public slots:
+    void setCurrentFrame(int);
+
 };
 
 #endif // SPRITEMODEL_H
