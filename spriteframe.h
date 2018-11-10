@@ -15,6 +15,7 @@ class SpriteFrame {
 
 	public:
 		SpriteFrame();
+        SpriteFrame(int,int);
 
 	// Private Members
 	private:

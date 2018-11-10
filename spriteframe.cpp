@@ -7,6 +7,11 @@ SpriteFrame::SpriteFrame() {
 
 }
 
+SpriteFrame::SpriteFrame(int width, int height) {
+    _width = width;
+    _height = height;
+}
+
 /**
  * @brief SpriteFrame::load
  * @param path
