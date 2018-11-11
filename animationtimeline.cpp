@@ -29,6 +29,7 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
     plusButton->setFixedWidth(30);
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
+
     timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
 
     frameButtons.push_back(plusButton);
@@ -46,11 +47,16 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
 
 }
 
+/**
+ * @brief Add a new frame to the bottom of the list. This new
+ * frame is selected.
+ * @param newFrame
+ */
 void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     QPushButton *frameButton = new QPushButton;
     //Numbering for testing
-    frameButton->setText(QString::number(tempAddingCounter));
-    tempAddingCounter++;
+    //frameButton->setText(QString::number(tempAddingCounter));
+    //tempAddingCounter++;
 
     //Add frame to animation
     size_t newFrameIndex = model->getAnimation().length();
@@ -73,8 +79,6 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
     //Select new frame
     selectFrameButton(frameButton);
 
-    std::cout<< "adding frame"<<std::endl;
-
 }
 
 /**
@@ -86,7 +90,7 @@ void AnimationTimeline::deleteFrame(int frameIndex){
     frameButtons.erase(frameButtons.begin() + frameIndex);
 
     timelineLayout->removeWidget(remove);
-    //model->getAnimation().removeFrame(frameIndex);
+    model->getAnimation().removeFrame(frameIndex);
 
     delete remove;
 }
@@ -101,13 +105,11 @@ void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
  * @param index
  */
 void AnimationTimeline::setButtonIcon(size_t index){
-
     SpriteFrame frame = model->getFrame(index);
 
     QPixmap pix = frame.getPixMap();
     QIcon ButtonIcon(pix);
     frameButtons[index]->setIcon(ButtonIcon);
-
 }
 
 /**
@@ -130,6 +132,12 @@ void AnimationTimeline::selectFrame(){
     selectFrameButton(qobject_cast<QPushButton*>(sender()));
 }
 
+/**
+ * @brief Sets the given button to the selected button. The
+ * selected button is disabled and the currently editable
+ * frame.
+ * @param send
+ */
 void AnimationTimeline::selectFrameButton(QPushButton* send){
 
     //Refresh old selected button's icon
