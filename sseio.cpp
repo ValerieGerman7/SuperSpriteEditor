@@ -123,7 +123,7 @@ Animation SSEIO::load(QString path) {
 
 /**
  * @brief SSEIO::exportToGif
- * Uses the gif.h library to export to gif.
+ * Uses the gif.h library to export all frames to an animated gif.
  * @param anim
  * @param path
  */
@@ -135,13 +135,13 @@ void SSEIO::exportToGif(Animation &anim, QString path) {
     int HEIGHT = anim.getFrame(0).getImage().height();
 
 
-    GifBegin(&writer, &pathAsString[0], WIDTH, HEIGHT, 100 / 2);
+    GifBegin(&writer, &pathAsString[0], WIDTH, HEIGHT, anim.framesPerSecond);
 
     for (int i = 0; i < anim.length(); i++){
         QImage currentFrame = anim.getFrame(i).getImage().rgbSwapped().convertToFormat(QImage::Format_ARGB32);
         uchar *bits = currentFrame.bits();
         QByteArray rgba((char *)bits, currentFrame.sizeInBytes());
-        GifWriteFrame(&writer, (uint8_t *)rgba.data(), currentFrame.width(), currentFrame.height(), 100 / 2);
+        GifWriteFrame(&writer, (uint8_t *)rgba.data(), currentFrame.width(), currentFrame.height(), anim.framesPerSecond);
     }
 
     GifEnd(&writer);
