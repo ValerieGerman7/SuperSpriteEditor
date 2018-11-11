@@ -18,6 +18,7 @@ void SpriteModel::setAnimation(Animation anim){
     animation = anim;
     currentIndex = 0;
     notifyOfFrameChange();
+	emit animationChanged();
 }
 
 void SpriteModel::setCurrentFrame(int index) {

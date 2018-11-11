@@ -44,6 +44,7 @@ public:
 
 signals:
     void currentFrameChanged();
+	void animationChanged();
 
 public slots:
     void setCurrentFrame(int);
