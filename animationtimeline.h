@@ -25,6 +25,8 @@ public:
 
     void moveFrame(SpriteFrame frameToMove, int index);
 
+	void resetAnimationTimeline();
+
 private:
     QVBoxLayout* timelineLayout;
 
@@ -41,6 +43,8 @@ private:
     void setButtonIcon(size_t index);
 
     void selectFrameButton(QPushButton*);
+
+
 
 public slots:
     void addNewBlankFrame();

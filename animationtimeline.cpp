@@ -152,3 +152,7 @@ void AnimationTimeline::selectFrameButton(QPushButton* send){
 
     emit setSelectedFrame(index);
 }
+
+void AnimationTimeline::resetAnimationTimeline() {
+	// TODO: remove any existing buttons and recreate new ones using the current animation
+}
