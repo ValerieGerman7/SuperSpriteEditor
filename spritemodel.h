@@ -14,6 +14,7 @@ class SpriteModel : public QObject
 private:
     Animation animation;
     int currentIndex = 0;
+    int previewIndex = -1;
 
 public:
     explicit SpriteModel(QObject *parent = nullptr);
@@ -40,6 +41,9 @@ public:
 
 	void createNewAnimation(int, int);
 
+    int getAndIncrementPreviewIndex(bool);
+
+    int getCurrentIndex();
     SSEIO io;
 
 signals:

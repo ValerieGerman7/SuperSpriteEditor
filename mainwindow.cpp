@@ -62,7 +62,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 
     //previewpane signals and slots
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-
+    connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::nextFrame);
 
     timeline = new AnimationTimeline(ui->verticalLayout, model);
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
@@ -250,17 +250,23 @@ void MainWindow::on_quitButton_clicked()
 }
 
 void MainWindow::nextFrame(){
-    //get next pixmap
+    SpriteFrame newPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(true));
 
-    QPixmap testPixmap("://images/black48p.png");
-    ui->previewPane->setPixmap(testPixmap);
+    ui->previewPane->setPixmap(newPreviewPaneSprite.getPixMap());
     ui->previewPane->repaint();
 
     if(animationPreviewWindow.isVisible()){
-        animationPreviewWindow.nextFrame(testPixmap);
+        animationPreviewWindow.nextFrame(newPreviewPaneSprite.getPixMap());
     }
 }
 
+void MainWindow::updatePreviewPane(){
+    if(model->getCurrentIndex() == model->getAndIncrementPreviewIndex(false)){
+        SpriteFrame updatedPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(false));
+        ui->previewPane->setPixmap(updatedPreviewPaneSprite.getPixMap());
+        ui->previewPane->repaint();
+    }
+}
 void MainWindow::on_previewFpsSlider_valueChanged(int value)
 {
     model->getAnimation().framesPerSecond = value;

@@ -44,9 +44,10 @@ private slots:
 
     void quit();
 
+    // Preview Pane slots
     void nextFrame();
-
     void on_previewFpsSlider_valueChanged(int value);
+    void updatePreviewPane();
 
 	void on_actionNew_triggered();
 
