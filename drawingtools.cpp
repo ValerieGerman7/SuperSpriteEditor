@@ -66,7 +66,15 @@ void DrawingTools::useFill(QImage& image, QPoint imagePoint, QColor& target) {
   * The pen tool simply sets the color of the pixel at this point.
  */
 void DrawingTools::useErase(QImage& image, QPoint& imagePoint) {
-    image.setPixelColor(imagePoint, QColor(0,0,0,0) );
+    if (penWidth == 1) {
+        image.setPixelColor(imagePoint, QColor(0,0,0,0) );
+    } else {
+        QPainter p(&image);
+        //p.setBackgroundMode(Qt::TransparentMode);
+        p.setCompositionMode(QPainter::CompositionMode_Clear);
+        int offset = penWidth / 2;
+        p.eraseRect(imagePoint.x() - offset, imagePoint.y() - offset, penWidth, penWidth);
+    }
 }
 
 /**
