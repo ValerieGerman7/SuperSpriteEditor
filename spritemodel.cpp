@@ -1,6 +1,6 @@
 #include "spritemodel.h"
 #include <iostream>
-
+#include <QDebug>
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
     //Default size
@@ -85,4 +85,27 @@ void SpriteModel::createNewAnimation(int width, int height) {
  */
 Animation& SpriteModel::getAnimationSlot(){
     return animation;
+}
+
+/**
+ * @brief SpriteModel::getAndIncrementPreviewIndex
+ * @param shouldIncrement
+ * @return
+ *
+ * Returns either the index of the next sprite frame to display, or the index
+ * of the currently displayed sprite based on the boolean parameter.
+ */
+int SpriteModel::getAndIncrementPreviewIndex(bool shouldIncrement){
+
+    if(shouldIncrement){
+        previewIndex = ++previewIndex % (getAnimationLength() - 1);
+        return previewIndex;
+    }
+    else{
+        return previewIndex;
+    }
+}
+
+int SpriteModel::getCurrentIndex(){
+    return currentIndex;
 }

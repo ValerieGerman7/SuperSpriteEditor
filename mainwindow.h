@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QColorDialog>
 #include <string>
 #include "animationpreviewwindow.h"
 #include "spritemodel.h"
@@ -27,8 +28,9 @@ private slots:
 
     // tool slots
     void setUsePen();
+    void changePenWidth(int);
     void setUseFill();
-	void setUseEraser();
+    void setUseEraser();
 
     // palette slots
     void colorSliderChanged();
@@ -36,6 +38,7 @@ private slots:
     void addCurrentColorToPalette();
     void setColorFromPalette(int, int);
     void clearPalette();
+    void useColorDialog();
 
     // IO slots
     void saveToFile();
@@ -44,11 +47,12 @@ private slots:
 
     void quit();
 
+    // Preview Pane slots
     void nextFrame();
-
     void on_previewFpsSlider_valueChanged(int value);
+    void updatePreviewPane();
 
-	void on_actionNew_triggered();
+    void on_actionNew_triggered();
 
 private:
     int rgb[3] = { 0 };
@@ -56,7 +60,7 @@ private:
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
     QFileDialog fileDialog;
-
+    QColorDialog colorDialog;
     SpriteModel *model;
 
     AnimationTimeline* timeline;

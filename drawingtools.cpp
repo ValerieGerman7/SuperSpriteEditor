@@ -1,26 +1,30 @@
 #include "drawingtools.h"
 #include <iostream>
+#include <QPainter>
 
 QColor DrawingTools::toolColor = QColor(0,0,0);
 DrawingTools::ToolType DrawingTools::currentTool = DrawingTools::PEN;
+unsigned int DrawingTools::penWidth = 1;
 
 /**
- * A sort of drive method to minimize the code needed to use the current
+ * A driver method to minimize the code needed to use the current
  * tool from other classes.
  */
 void DrawingTools::useCurrentTool(QImage& image, QPoint& imagePoint) {
     switch(currentTool) {
-    case PEN:
-        usePen(image, imagePoint);
-        break;
-	case FILL:{
-        QColor targetColor = image.pixelColor(imagePoint);
-        useFill(image, imagePoint, targetColor);
-		}
-        break;
-	case ERASE:
-		useErase(image, imagePoint);
-		break;
+        case PEN: {
+            usePen(image, imagePoint);
+            break;
+        }
+        case FILL: {
+            QColor targetColor = image.pixelColor(imagePoint);
+            useFill(image, imagePoint, targetColor);
+            break;
+        }
+        case ERASE: {
+            useErase(image, imagePoint);
+            break;
+        }
     }
 }
 
@@ -28,7 +32,14 @@ void DrawingTools::useCurrentTool(QImage& image, QPoint& imagePoint) {
   * The pen tool simply sets the color of the pixel at this point.
  */
 void DrawingTools::usePen(QImage& image, QPoint& imagePoint) {
-    image.setPixelColor(imagePoint, toolColor);
+    if (penWidth == 1) {
+        image.setPixelColor(imagePoint, toolColor);
+    } else {
+        QPainter p(&image);
+        // use the offset to keep large pencil sizes centered on the mouse
+        int offset = penWidth / 2;
+        p.fillRect(imagePoint.x() - offset, imagePoint.y() - offset, penWidth, penWidth, toolColor);
+    }
 }
 
 /**
@@ -55,8 +66,15 @@ void DrawingTools::useFill(QImage& image, QPoint imagePoint, QColor& target) {
   * The pen tool simply sets the color of the pixel at this point.
  */
 void DrawingTools::useErase(QImage& image, QPoint& imagePoint) {
-	image.setPixelColor(imagePoint, QColor(0,0,0,0) );
-	std::cout << "Erase" << std::endl;
+    if (penWidth == 1) {
+        image.setPixelColor(imagePoint, QColor(0,0,0,0) );
+    } else {
+        QPainter p(&image);
+        //p.setBackgroundMode(Qt::TransparentMode);
+        p.setCompositionMode(QPainter::CompositionMode_Clear);
+        int offset = penWidth / 2;
+        p.eraseRect(imagePoint.x() - offset, imagePoint.y() - offset, penWidth, penWidth);
+    }
 }
 
 /**

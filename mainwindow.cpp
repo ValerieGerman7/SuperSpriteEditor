@@ -21,27 +21,28 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
+    connect(ui->penWidthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changePenWidth(int)));
     connect(ui->fillButton, SIGNAL(pressed()), this, SLOT(setUseFill()));
-	connect(ui->eraseButton, SIGNAL(pressed()), this, SLOT( setUseEraser()));
+    connect(ui->eraseButton, SIGNAL(pressed()), this, SLOT( setUseEraser()));
 
     // palette related signals and slots
+    connect(ui->colorPreview, SIGNAL(released()), this, SLOT(useColorDialog()));
     connect(ui->redSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
     connect(ui->greenSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
     connect(ui->blueSlider, SIGNAL(valueChanged(int)), this, SLOT(colorSliderChanged()));
     connect(ui->redSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
-    connect(ui->greenSlidertext, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
+    connect(ui->greenSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
     connect(ui->blueSliderText, SIGNAL(textEdited(const QString&)), this, SLOT(colorSliderTextChanged()));
-
     connect(ui->addToPaletteBtn, SIGNAL(released()), this, SLOT(addCurrentColorToPalette()));
     connect(ui->paletteTable, SIGNAL(cellClicked(int,int)), this, SLOT(setColorFromPalette(int, int)));
     connect(ui->clearPaletteBtn, SIGNAL(released()), this, SLOT(clearPalette()));
 
     // Render canvas
-	ui->renderArea->setModel(model); // give the canvas a ref to the model
-	connect(&model, &SpriteModel::currentFrameChanged, ui->renderArea,
+    ui->renderArea->setModel(model); // give the canvas a ref to the model
+    connect(&model, &SpriteModel::currentFrameChanged, ui->renderArea,
             static_cast<void (QWidget::*)()>(&QWidget::repaint));
             // there's a few QWidget.repaint() functions, so cast/force it to the zero parameters one
-	connect(ui->fitSpriteButton, &QPushButton::pressed, ui->renderArea, &RenderCanvas::fitImageToFrame);
+    connect(ui->fitSpriteButton, &QPushButton::pressed, ui->renderArea, &RenderCanvas::fitImageToFrame);
 
     // Flip and rotate buttons
     connect(ui->flipHorizontalButton, &QPushButton::pressed,
@@ -52,7 +53,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
             &model, &SpriteModel::rotateCurrentFrameAntiClockWise );
     connect(ui->rotateRightButton, &QPushButton::pressed,
             &model, &SpriteModel::rotateCurrentFrameClockWise );
-	connect(ui->newSpriteDialog, &NewSpriteDialog::createNewAnimation, &model, &SpriteModel::createNewAnimation );
+    connect(ui->newSpriteDialog, &NewSpriteDialog::createNewAnimation, &model, &SpriteModel::createNewAnimation );
 
 
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveToFile()));
@@ -62,12 +63,12 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 
     //previewpane signals and slots
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-
+    connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::nextFrame);
 
     timeline = new AnimationTimeline(ui->verticalLayout, model);
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
     connect(timeline, &AnimationTimeline::getAnimation, &model, &SpriteModel::getAnimationSlot);
-	connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
+    connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 }
 
 MainWindow::~MainWindow()
@@ -92,6 +93,17 @@ std::string MainWindow::getCurrentHexColor() {
 }
 
 /**
+ * Opens a flexible color dialog for fine-tuned color selection.
+ */
+void MainWindow::useColorDialog() {
+    QColor c = QColorDialog::getColor(DrawingTools::toolColor);
+    ui->redSlider->setValue(c.red());
+    ui->greenSlider->setValue(c.green());
+    ui->blueSlider->setValue(c.blue());
+    colorSliderChanged();
+}
+
+/**
  * Updates tool color and ui elements that represent the current color when
  * the value of a palette slider has been changed.
  */
@@ -100,7 +112,7 @@ void MainWindow::colorSliderChanged() {
     rgb[1] = ui->greenSlider->value();
     rgb[2] = ui->blueSlider->value();
     ui->redSliderText->setText(QString::number(rgb[0]));
-    ui->greenSlidertext->setText(QString::number(rgb[1]));
+    ui->greenSliderText->setText(QString::number(rgb[1]));
     ui->blueSliderText->setText(QString::number(rgb[2]));
     updateToolColor(rgb);
 }
@@ -111,7 +123,7 @@ void MainWindow::colorSliderChanged() {
  */
 void MainWindow::colorSliderTextChanged() {
     rgb[0] = ui->redSliderText->text().toInt();
-    rgb[1] = ui->greenSlidertext->text().toInt();
+    rgb[1] = ui->greenSliderText->text().toInt();
     rgb[2] = ui->blueSliderText->text().toInt();
     ui->redSlider->setValue(rgb[0]);
     ui->greenSlider->setValue(rgb[1]);
@@ -142,9 +154,7 @@ void MainWindow::addCurrentColorToPalette() {
     ui->paletteTable->item(row, col)->setBackgroundColor(QColor(rgb[0], rgb[1], rgb[2], 255));
     paletteCount++;
 
-    // what would be the best way to handle a full palette?
     if (row >= ui->paletteTable->rowCount() - 1 && col >= ui->paletteTable->columnCount() - 1) {
-        qDebug("too many colors for palette");
         ui->addToPaletteBtn->setEnabled(false);
     }
 }
@@ -173,19 +183,23 @@ void MainWindow::clearPalette() {
 void MainWindow::setUsePen() {
     DrawingTools::currentTool = DrawingTools::PEN;
     ui->fillButton->setChecked(false);
-	ui->eraseButton->setChecked(false);
+    ui->eraseButton->setChecked(false);
+}
+
+void MainWindow::changePenWidth(int v) {
+    DrawingTools::penWidth = v;
 }
 
 void MainWindow::setUseFill() {
     DrawingTools::currentTool = DrawingTools::FILL;
     ui->drawButton->setChecked(false);
-	ui->eraseButton->setChecked(false);
+    ui->eraseButton->setChecked(false);
 }
 
 void MainWindow::setUseEraser() {
-	DrawingTools::currentTool = DrawingTools::ERASE;
-	ui->fillButton->setChecked(false);
-	ui->drawButton->setChecked(false);
+    DrawingTools::currentTool = DrawingTools::ERASE;
+    ui->fillButton->setChecked(false);
+    ui->drawButton->setChecked(false);
 }
 
 void MainWindow::saveToFile() {
@@ -251,17 +265,23 @@ void MainWindow::on_quitButton_clicked()
 }
 
 void MainWindow::nextFrame(){
-    //get next pixmap
+    SpriteFrame newPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(true));
 
-    QPixmap testPixmap("://images/black48p.png");
-    ui->previewPane->setPixmap(testPixmap);
+    ui->previewPane->setPixmap(newPreviewPaneSprite.getPixMap());
     ui->previewPane->repaint();
 
     if(animationPreviewWindow.isVisible()){
-        animationPreviewWindow.nextFrame(testPixmap);
+        animationPreviewWindow.nextFrame(newPreviewPaneSprite.getPixMap());
     }
 }
 
+void MainWindow::updatePreviewPane(){
+    if(model->getCurrentIndex() == model->getAndIncrementPreviewIndex(false)){
+        SpriteFrame updatedPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(false));
+        ui->previewPane->setPixmap(updatedPreviewPaneSprite.getPixMap());
+        ui->previewPane->repaint();
+    }
+}
 void MainWindow::on_previewFpsSlider_valueChanged(int value)
 {
     model->getAnimation().framesPerSecond = value;
@@ -276,7 +296,7 @@ void MainWindow::on_previewFpsSlider_valueChanged(int value)
 
 void MainWindow::on_actionNew_triggered()
 {
-	ui->newSpriteDialog->show();
+    ui->newSpriteDialog->show();
 }
 
 

@@ -3,5 +3,12 @@
         <file alias="drhenrykillinger">images/drhenrykillingerandmagicmurderbag.png</file>
         <file alias="background">images/background.png</file>
         <file>images/black48p.png</file>
+        <file>images/icons/fill.svg</file>
+        <file>images/icons/pencil.svg</file>
+        <file>images/icons/eraser.svg</file>
+        <file>images/icons/hflip.svg</file>
+        <file>images/icons/rccw.svg</file>
+        <file>images/icons/rcw.svg</file>
+        <file>images/icons/vflip.svg</file>
     </qresource>
 </RCC>
