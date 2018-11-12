@@ -61,14 +61,14 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionExportGIF, SIGNAL(triggered()), this, SLOT(exportToGifFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 
-    //previewpane signals and slots
-    connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-    connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::nextFrame);
+	//previewpane signals and slots
+	connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
+	connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::updatePreviewPane);
 
-    timeline = new AnimationTimeline(ui->verticalLayout, model);
-    connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
-    connect(timeline, &AnimationTimeline::getAnimation, &model, &SpriteModel::getAnimationSlot);
-    connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
+	timeline = new AnimationTimeline(ui->verticalLayout, model);
+	connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
+//	connect(timeline, &AnimationTimeline::getAnimation, &model, &SpriteModel::getAnimation);
+	connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 }
 
 MainWindow::~MainWindow()
@@ -265,7 +265,8 @@ void MainWindow::on_quitButton_clicked()
 }
 
 void MainWindow::nextFrame(){
-    SpriteFrame newPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(true));
+	int index = model->incrementPreviewIndex();
+	SpriteFrame newPreviewPaneSprite = model->getFrame(index);
 
     ui->previewPane->setPixmap(newPreviewPaneSprite.getPixMap());
     ui->previewPane->repaint();
@@ -276,8 +277,8 @@ void MainWindow::nextFrame(){
 }
 
 void MainWindow::updatePreviewPane(){
-    if(model->getCurrentIndex() == model->getAndIncrementPreviewIndex(false)){
-        SpriteFrame updatedPreviewPaneSprite = model->getFrame(model->getAndIncrementPreviewIndex(false));
+	if(model->getCurrentIndex() == model->getPreviewIndex()){
+		SpriteFrame updatedPreviewPaneSprite = model->getFrame(model->getPreviewIndex());
         ui->previewPane->setPixmap(updatedPreviewPaneSprite.getPixMap());
         ui->previewPane->repaint();
     }
