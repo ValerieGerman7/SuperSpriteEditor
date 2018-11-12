@@ -121,6 +121,15 @@ void AnimationTimeline::deleteFrame(int frameIndex){
     if(frameButtons.size() <= 1 + numToolButtons){
         return; //Never removes last frame
     }
+
+    //Remove button
+    QPushButton* remove = frameButtons.at(frameIndex);
+    frameButtons.erase(frameButtons.begin() + frameIndex);
+
+    timelineLayout->removeWidget(remove);
+    model->getAnimation().removeFrame(frameIndex);
+
+    //Set new selected
     if(selectedButtonIndex == frameIndex){
         //Select the previous frame
         if(selectedButtonIndex == 0){
@@ -129,11 +138,6 @@ void AnimationTimeline::deleteFrame(int frameIndex){
             selectFrameDeletedSelection(frameButtons[selectedButtonIndex-1]);
         }
     }
-    QPushButton* remove = frameButtons.at(frameIndex);
-    frameButtons.erase(frameButtons.begin() + frameIndex);
-
-    timelineLayout->removeWidget(remove);
-    model->getAnimation().removeFrame(frameIndex);
 
     delete remove;
 }
@@ -229,6 +233,7 @@ void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
  * This must be called after the animation object has been changed.
  */
 void AnimationTimeline::resetAnimationTimeline() {
+    std::cout<<"resent animation timeline"<<std::endl;
     //Delete old frames
     int frameNum = frameButtons.size();
     //Remove all except tool buttons
@@ -237,6 +242,7 @@ void AnimationTimeline::resetAnimationTimeline() {
         frameButtons.erase(frameButtons.begin());
 
         timelineLayout->removeWidget(remove);
+        delete remove;
     }
     //Add first frame back
     //First frame
@@ -244,7 +250,7 @@ void AnimationTimeline::resetAnimationTimeline() {
     QPushButton *frameButton = new QPushButton;
     frameButton->setFixedWidth(buttonSize);
     frameButton->setFixedHeight(buttonSize);
-    frameButtons.push_back(frameButton);
+    frameButtons.insert(frameButtons.begin(), frameButton);
     setButtonIcon(0);
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
     timelineLayout->addWidget(frameButton, Qt::AlignTop);
@@ -252,7 +258,7 @@ void AnimationTimeline::resetAnimationTimeline() {
     selectedButton = frameButton;
     selectedButtonIndex = 0;
     selectedButton->setEnabled(false);
-
+    std::cout<<"Vector length " << frameButtons.size() << std::endl;
     Animation ani = model->getAnimation();
     for(int i = 1; i < ani.length(); i++){
         addNewFrame(ani.getFrame(i));
