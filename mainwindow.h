@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QColorDialog>
 #include <string>
 #include "animationpreviewwindow.h"
 #include "spritemodel.h"
@@ -36,6 +37,7 @@ private slots:
     void addCurrentColorToPalette();
     void setColorFromPalette(int, int);
     void clearPalette();
+    void useColorDialog();
 
     // IO slots
     void saveToFile();
@@ -57,7 +59,7 @@ private:
     Ui::MainWindow *ui;
     AnimationPreviewWindow animationPreviewWindow;
     QFileDialog fileDialog;
-
+    QColorDialog colorDialog;
     SpriteModel *model;
 
     AnimationTimeline* timeline;
