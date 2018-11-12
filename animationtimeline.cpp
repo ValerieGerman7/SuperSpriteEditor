@@ -12,24 +12,19 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
 {
     buttonIconSize = QSize(buttonSize, buttonSize);
 
-    //Set up the first frame
+    //Set up the first frame (already existing in animation, so don't call insertFrame)
     QPushButton *frameButton = new QPushButton;
-
     frameButton->setFixedWidth(buttonSize);
     frameButton->setFixedHeight(buttonSize);
     //Add new frame
     frameButtons.push_back(frameButton);
     //Set icon
     setButtonIcon(0);
-
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
     timelineLayout->addWidget(frameButton, Qt::AlignTop);
     frameButton->show();
-
-    selectedButton = frameButton;
-    selectedButtonIndex = 0;
     //Select new frame
-    selectFrameButton(frameButton);
+    selectFrameDeletedSelection(frameButton);
 
     //Plus button tool
     QPushButton *plusButton = new QPushButton;
@@ -38,18 +33,14 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
     plusButton->setFixedWidth(buttonSize);
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
-
     timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
-
     frameButtons.push_back(plusButton);
-
-
 
     //Remove button tool
     QPushButton *removeButton = new QPushButton;
-    removeButton->setText("-");
     removeButton->setFixedHeight(buttonSize);
     removeButton->setFixedWidth(buttonSize);
+    removeButton->setText("-");
     QObject::connect(removeButton, &QPushButton::pressed,
                      this, &AnimationTimeline::removeSelectedFrame);
     removeButton->show();
@@ -173,6 +164,7 @@ void AnimationTimeline::setButtonIcon(size_t index){
     QPixmap pix = frame.getPixMap();
     QIcon ButtonIcon(pix);
     frameButtons[index]->setIcon(ButtonIcon);
+    frameButtons[index]->setIconSize(buttonIconSize);
 }
 
 /**

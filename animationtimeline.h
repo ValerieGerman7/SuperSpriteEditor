@@ -30,17 +30,27 @@ public:
 	void resetAnimationTimeline();
 
 private:
+    //This timeline's layout
     QVBoxLayout* timelineLayout;
 
+    //The model of the sprite editor
     SpriteModel* model;
 
-    int buttonSize = 45;
+    //The size of the buttons in this timeline
+    int buttonSize = 50;
+    //Stores a QSize to set button icons
     QSize buttonIconSize;
+
+    //The number of tool buttons
     int numToolButtons = 2;
 
+    //The button pointers corresponding to the frames and the
+    //tool buttons
     std::vector<QPushButton*> frameButtons;
 
+    //The currently selected button
     QPushButton* selectedButton;
+    //The index of the currently selected button
     int selectedButtonIndex;
 
     void setButtonIcon(size_t index);
