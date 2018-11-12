@@ -16,6 +16,13 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
 std::cout<<"starting with animation of length " << this->model->getAnimation().length() <<std::endl;
 }
 
+/**
+ * @brief AnimationTimeline::setupNewAnimation Sets up a new animation.
+ * Assumptions: The layout shouldn't contain any widgets. The animation should have at least
+ * one frame.
+ * The frameButtons vector is reset. The frames of the animation are added. The plus
+ * and remove buttons are added and connected.
+ */
 void AnimationTimeline::setupNewAnimation(){
     //New vector
     frameButtons = std::vector<QPushButton*>();
@@ -256,10 +263,8 @@ void AnimationTimeline::resetAnimationTimeline() {
         timelineLayout->removeWidget(remove);
         delete remove;
     }
-
+    //Set up the animation for the new animation object
     setupNewAnimation();
-
-
 }
 
 /**
