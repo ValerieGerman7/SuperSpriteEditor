@@ -4,12 +4,16 @@
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
     //Default size
-    animation = Animation(300,300);
+	animation = Animation();
     SpriteFrame newFrame;
     newFrame.load("://drhenrykillinger");
     animation.insertFrame(0, newFrame);
 }
 
+/**
+ * @brief Returns the animation object
+ * @return
+ */
 Animation& SpriteModel::getAnimation() {
     return animation;
 }
@@ -23,8 +27,12 @@ void SpriteModel::setAnimation(Animation anim){
 }
 
 void SpriteModel::setCurrentFrame(int index) {
-    currentIndex = index;
-    notifyOfFrameChange();
+	if ( index >= animation.length() ) {
+		std::cerr << "SpriteModel::setCurrentFrame: Frame index out of  bounds" << std::endl;
+	} else {
+		currentIndex = index;
+		notifyOfFrameChange();
+	}
 }
 
 SpriteFrame& SpriteModel::getCurrentFrame() {
@@ -32,6 +40,10 @@ SpriteFrame& SpriteModel::getCurrentFrame() {
 }
 
 SpriteFrame& SpriteModel::getFrame(int index) {
+	if ( index >= animation.length() ) {
+		std::cerr << "SpriteModel::getFrame: Frame index out of  bounds" << std::endl;
+		return animation.getFrame(0);
+	}
     return animation.getFrame(index);
 }
 
@@ -78,17 +90,38 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
 void SpriteModel::createNewAnimation(int width, int height) {
 	auto animation = Animation(width, height);
 	setAnimation(animation);
+<<<<<<< HEAD
     emit animationChanged();
+=======
 }
 
 /**
- * @brief SpriteModel::getAndIncrementPreviewIndex
- * @param shouldIncrement
+ * @brief SpriteModel::incrementPreviewIndex
  * @return
  *
- * Returns either the index of the next sprite frame to display, or the index
- * of the currently displayed sprite based on the boolean parameter.
+ * Increments the index, then returns the index of the currently previewed sprite.
  */
+int SpriteModel::incrementPreviewIndex(){
+//	std::cout << getAnimationLength() << std::endl;
+//	if ((getAnimationLength() - 1)==0) {
+//		std::cout << "zero" << std::endl;
+//	}
+	previewIndex += 1;
+	if ( previewIndex >= getAnimationLength() ) {
+		previewIndex = 0;
+	}
+//	previewIndex = ++previewIndex % (getAnimationLength() - 1);
+	return previewIndex;
+>>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
+}
+
+/**
+ * @brief SpriteModel::getPreviewIndex
+ * @return
+ *
+ * Returns the index of the currently previewed sprite.
+ */
+<<<<<<< HEAD
 int SpriteModel::getAndIncrementPreviewIndex(bool shouldIncrement){
     if(shouldIncrement){
         int animationLength = getAnimationLength();
@@ -103,6 +136,10 @@ int SpriteModel::getAndIncrementPreviewIndex(bool shouldIncrement){
     else{
         return previewIndex;
     }
+=======
+int SpriteModel::getPreviewIndex(){
+	return previewIndex;
+>>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
 }
 
 int SpriteModel::getCurrentIndex(){
