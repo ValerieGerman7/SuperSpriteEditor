@@ -21,6 +21,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
 
     // tool related signals and slots
     connect(ui->drawButton, SIGNAL(pressed()), this, SLOT(setUsePen()));
+    connect(ui->penWidthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changePenWidth(int)));
     connect(ui->fillButton, SIGNAL(pressed()), this, SLOT(setUseFill()));
     connect(ui->eraseButton, SIGNAL(pressed()), this, SLOT( setUseEraser()));
 
@@ -183,6 +184,10 @@ void MainWindow::setUsePen() {
     DrawingTools::currentTool = DrawingTools::PEN;
     ui->fillButton->setChecked(false);
     ui->eraseButton->setChecked(false);
+}
+
+void MainWindow::changePenWidth(int v) {
+    DrawingTools::penWidth = v;
 }
 
 void MainWindow::setUseFill() {

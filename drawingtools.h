@@ -9,6 +9,7 @@ class DrawingTools
 public:
     enum ToolType {PEN, FILL, ERASE};
     static ToolType currentTool;
+    static unsigned int penWidth;
     static QColor toolColor;
     static void useCurrentTool(QImage&, QPoint&);
 

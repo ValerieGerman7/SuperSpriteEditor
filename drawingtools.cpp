@@ -1,8 +1,10 @@
 #include "drawingtools.h"
 #include <iostream>
+#include <QPainter>
 
 QColor DrawingTools::toolColor = QColor(0,0,0);
 DrawingTools::ToolType DrawingTools::currentTool = DrawingTools::PEN;
+unsigned int DrawingTools::penWidth = 1;
 
 /**
  * A driver method to minimize the code needed to use the current
@@ -30,7 +32,14 @@ void DrawingTools::useCurrentTool(QImage& image, QPoint& imagePoint) {
   * The pen tool simply sets the color of the pixel at this point.
  */
 void DrawingTools::usePen(QImage& image, QPoint& imagePoint) {
-    image.setPixelColor(imagePoint, toolColor);
+    if (penWidth == 1) {
+        image.setPixelColor(imagePoint, toolColor);
+    } else {
+        QPainter p(&image);
+        // use the offset to keep large pencil sizes centered on the mouse
+        int offset = penWidth / 2;
+        p.fillRect(imagePoint.x() - offset, imagePoint.y() - offset, penWidth, penWidth, toolColor);
+    }
 }
 
 /**

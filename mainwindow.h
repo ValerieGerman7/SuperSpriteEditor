@@ -28,8 +28,9 @@ private slots:
 
     // tool slots
     void setUsePen();
+    void changePenWidth(int);
     void setUseFill();
-	void setUseEraser();
+    void setUseEraser();
 
     // palette slots
     void colorSliderChanged();
@@ -51,7 +52,7 @@ private slots:
     void on_previewFpsSlider_valueChanged(int value);
     void updatePreviewPane();
 
-	void on_actionNew_triggered();
+    void on_actionNew_triggered();
 
 private:
     int rgb[3] = { 0 };
