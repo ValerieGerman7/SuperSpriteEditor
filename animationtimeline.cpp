@@ -13,7 +13,7 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
     buttonIconSize = QSize(buttonSize, buttonSize);
 
     setupNewAnimation();
-
+std::cout<<"starting with animation of length " << this->model->getAnimation().length() <<std::endl;
 }
 
 void AnimationTimeline::setupNewAnimation(){
@@ -54,6 +54,12 @@ void AnimationTimeline::setupNewAnimation(){
     removeButton->show();
     timelineLayout->addWidget(removeButton, 0, Qt::AlignTop);
     frameButtons.push_back(removeButton);
+
+    //Add any other frames this animation may have
+    Animation ani = model->getAnimation();
+    for(int i = 1; i < ani.length(); i++){
+        addNewFrame(ani.getFrame(i));
+    }
 }
 
 /**
@@ -82,8 +88,8 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
  * @param newFrame
  */
 void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
-    size_t newFrameIndex = model->getAnimation().length();
-    insertNewFrame(newFrame, newFrameIndex);
+    size_t endOfFramesIndex = frameButtons.size() - numToolButtons;
+    insertNewFrame(newFrame, endOfFramesIndex);
 }
 
 /**
@@ -103,14 +109,14 @@ void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
     frameButton->setFixedHeight(buttonSize);
 
     //Add new frame
-    frameButtons.insert(frameButtons.begin()+(newFrameIndex-1), frameButton);
+    frameButtons.insert(frameButtons.begin()+(newFrameIndex), frameButton);
 
     //Set in animation object
-    setButtonIcon(newFrameIndex-1);
+    setButtonIcon(newFrameIndex);
 
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
 
-    timelineLayout->insertWidget(newFrameIndex-1, frameButton, Qt::AlignTop);
+    timelineLayout->insertWidget(newFrameIndex, frameButton, Qt::AlignTop);
     frameButton->show();
 
     //Select new frame
@@ -252,10 +258,7 @@ void AnimationTimeline::resetAnimationTimeline() {
     }
 
     setupNewAnimation();
-    Animation ani = model->getAnimation();
-    for(int i = 1; i < ani.length(); i++){
-        addNewFrame(ani.getFrame(i));
-    }
+
 
 }
 
