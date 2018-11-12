@@ -53,6 +53,8 @@ private:
     //The index of the currently selected button
     int selectedButtonIndex;
 
+    void setupNewAnimation();
+
     void setButtonIcon(size_t index);
 
     void selectFrameButton(QPushButton*);

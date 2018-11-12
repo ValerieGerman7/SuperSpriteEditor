@@ -12,6 +12,14 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
 {
     buttonIconSize = QSize(buttonSize, buttonSize);
 
+    setupNewAnimation();
+
+}
+
+void AnimationTimeline::setupNewAnimation(){
+    //New vector
+    frameButtons = std::vector<QPushButton*>();
+
     //Set up the first frame (already existing in animation, so don't call insertFrame)
     QPushButton *frameButton = new QPushButton;
     frameButton->setFixedWidth(buttonSize);
@@ -46,7 +54,6 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
     removeButton->show();
     timelineLayout->addWidget(removeButton, 0, Qt::AlignTop);
     frameButtons.push_back(removeButton);
-
 }
 
 /**
@@ -233,36 +240,23 @@ void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
  * This must be called after the animation object has been changed.
  */
 void AnimationTimeline::resetAnimationTimeline() {
-    std::cout<<"resent animation timeline"<<std::endl;
     //Delete old frames
     int frameNum = frameButtons.size();
     //Remove all except tool buttons
-    for(int i = 0; i < frameNum - numToolButtons; i++){
+    for(int i = 0; i < frameNum; i++){
         QPushButton* remove = frameButtons.at(0);
         frameButtons.erase(frameButtons.begin());
 
         timelineLayout->removeWidget(remove);
         delete remove;
     }
-    //Add first frame back
-    //First frame
-    //Set up the first frame (already existing in animation, so don't call insertFrame)
-    QPushButton *frameButton = new QPushButton;
-    frameButton->setFixedWidth(buttonSize);
-    frameButton->setFixedHeight(buttonSize);
-    frameButtons.insert(frameButtons.begin(), frameButton);
-    setButtonIcon(0);
-    QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
-    timelineLayout->addWidget(frameButton, Qt::AlignTop);
-    frameButton->show();
-    selectedButton = frameButton;
-    selectedButtonIndex = 0;
-    selectedButton->setEnabled(false);
-    std::cout<<"Vector length " << frameButtons.size() << std::endl;
+
+    setupNewAnimation();
     Animation ani = model->getAnimation();
     for(int i = 1; i < ani.length(); i++){
         addNewFrame(ani.getFrame(i));
     }
+
 }
 
 /**
