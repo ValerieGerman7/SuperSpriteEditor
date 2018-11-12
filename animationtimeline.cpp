@@ -10,6 +10,8 @@
 AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QObject *parent)
     : timelineLayout(layout), model(&model)
 {
+    buttonIconSize = QSize(buttonSize, buttonSize);
+
     //Set up the first frame
     QPushButton *frameButton = new QPushButton;
 
@@ -120,11 +122,21 @@ void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
 /**
  * @brief Remove the button corresponding to the index, and the frame from the animation.
  * If there is only one frame left, that frame is not removed.
+ * Selects the frame prior to this frame after deletion, if the first frame is deleted,
+ * the new first frame is selected.
  * @param frameIndex
  */
 void AnimationTimeline::deleteFrame(int frameIndex){
     if(frameButtons.size() <= 1 + numToolButtons){
         return; //Never removes last frame
+    }
+    if(selectedButtonIndex == frameIndex){
+        //Select the previous frame
+        if(selectedButtonIndex == 0){
+            selectFrameDeletedSelection(frameButtons[0]);
+        } else {
+            selectFrameDeletedSelection(frameButtons[selectedButtonIndex-1]);
+        }
     }
     QPushButton* remove = frameButtons.at(frameIndex);
     frameButtons.erase(frameButtons.begin() + frameIndex);
@@ -185,16 +197,30 @@ void AnimationTimeline::selectFrame(){
 
 /**
  * @brief Sets the given button to the selected button. The
- * selected button is disabled and the currently editable
+ * selected button is disabled and the currently editable. The previously
+ * selected button must be valid.
  * frame.
  * @param send
  */
 void AnimationTimeline::selectFrameButton(QPushButton* send){
-
     //Refresh old selected button's icon
     setButtonIcon(selectedButtonIndex);
     selectedButton->setEnabled(true);
 
+    selectedButton = send;
+
+    size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
+    selectedButtonIndex = index;
+    selectedButton->setEnabled(false);
+
+    emit setSelectedFrame(index);
+}
+
+/**
+ * @brief Selects the given button, assumes the current selectedButton has been
+ * deleted.
+ */
+void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
     selectedButton = send;
 
     size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
@@ -229,6 +255,10 @@ void AnimationTimeline::resetAnimationTimeline() {
     selectedButton->setEnabled(false);
 }
 
+/**
+ * @brief AnimationTimeline::removeSelectedFrame Removes the selected Frame. If the
+ * selected frame is the last frame, nothing happens.
+ */
 void AnimationTimeline::removeSelectedFrame(){
-    std::cout<< "removeing selected" << std::endl;
+    deleteFrame(selectedButtonIndex);
 }

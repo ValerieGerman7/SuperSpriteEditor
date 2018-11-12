@@ -35,7 +35,8 @@ private:
     SpriteModel* model;
 
     int buttonSize = 45;
-    int numToolButtons = 1;
+    QSize buttonIconSize;
+    int numToolButtons = 2;
 
     std::vector<QPushButton*> frameButtons;
 
@@ -46,7 +47,7 @@ private:
 
     void selectFrameButton(QPushButton*);
 
-
+    void selectFrameDeletedSelection(QPushButton*);
 
 public slots:
     void addNewBlankFrame();
