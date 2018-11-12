@@ -53,11 +53,7 @@ signals:
     void animationChanged();
 
 public slots:
-<<<<<<< HEAD
     void setCurrentFrame(int);
-=======
-	void setCurrentFrame(int);
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
 
 };
 

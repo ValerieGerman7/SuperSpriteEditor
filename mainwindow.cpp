@@ -61,25 +61,15 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(ui->actionExportGIF, SIGNAL(triggered()), this, SLOT(exportToGifFile()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(quit()));
 
-<<<<<<< HEAD
     //previewpane signals and slots
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-    connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::nextFrame);
+    connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::updatePreviewPane);
 
     //Timeline
     timeline = new AnimationTimeline(ui->verticalLayout, model);
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
     connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
-=======
-	//previewpane signals and slots
-	connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
-	connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::updatePreviewPane);
 
-	timeline = new AnimationTimeline(ui->verticalLayout, model);
-	connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
-//	connect(timeline, &AnimationTimeline::getAnimation, &model, &SpriteModel::getAnimation);
-	connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
 }
 
 MainWindow::~MainWindow()

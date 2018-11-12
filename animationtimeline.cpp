@@ -119,11 +119,7 @@ void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
     frameButtons.insert(frameButtons.begin()+(newFrameIndex), frameButton);
 
     //Set in animation object
-<<<<<<< HEAD
     setButtonIcon(newFrameIndex);
-=======
-	setButtonIcon(newFrameIndex);
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
 
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
 
@@ -257,7 +253,6 @@ void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
  * This must be called after the animation object has been changed.
  */
 void AnimationTimeline::resetAnimationTimeline() {
-<<<<<<< HEAD
     //Delete old frames
     int frameNum = frameButtons.size();
     //Remove all except tool buttons
@@ -278,36 +273,4 @@ void AnimationTimeline::resetAnimationTimeline() {
  */
 void AnimationTimeline::removeSelectedFrame(){
     deleteFrame(selectedButtonIndex);
-=======
-	// TODO: remove any existing buttons and recreate new ones using the current animation
-
-//	for( int i = 0; i < frameButtons.size(); i ++ ) {
-//		QPushButton* remove = frameButtons.at(i);
-//		frameButtons.erase(frameButtons.begin() + i);
-
-//		timelineLayout->removeWidget(remove);
-
-//		delete remove;
-//	}
-
-//	for ( int i = 0; i < model->getAnimationLength(); i++ ) {
-//		QPushButton *frameButton = new QPushButton;
-
-//		frameButton->setFixedWidth(buttonSize);
-//		frameButton->setFixedHeight(buttonSize);
-
-//		//Add new frame
-//		frameButtons.insert(frameButtons.begin()+(i-1), frameButton);
-
-//		//Set in animation object
-//		setButtonIcon(i);
-
-//		QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
-
-//		timelineLayout->insertWidget(i-1, frameButton, Qt::AlignTop);
-//		frameButton->show();
-//	}
-
-
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
 }

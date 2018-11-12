@@ -89,10 +89,8 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
 
 void SpriteModel::createNewAnimation(int width, int height) {
 	auto animation = Animation(width, height);
-	setAnimation(animation);
-<<<<<<< HEAD
+    setAnimation(animation);
     emit animationChanged();
-=======
 }
 
 /**
@@ -111,35 +109,11 @@ int SpriteModel::incrementPreviewIndex(){
 		previewIndex = 0;
 	}
 //	previewIndex = ++previewIndex % (getAnimationLength() - 1);
-	return previewIndex;
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
+    return previewIndex;
 }
 
-/**
- * @brief SpriteModel::getPreviewIndex
- * @return
- *
- * Returns the index of the currently previewed sprite.
- */
-<<<<<<< HEAD
-int SpriteModel::getAndIncrementPreviewIndex(bool shouldIncrement){
-    if(shouldIncrement){
-        int animationLength = getAnimationLength();
-        if(animationLength <= 1){
-            previewIndex = 0;
-            //Cannot mod zero
-            return previewIndex;
-        }
-        previewIndex = (++previewIndex) % (animationLength - 1);
-        return previewIndex;
-    }
-    else{
-        return previewIndex;
-    }
-=======
 int SpriteModel::getPreviewIndex(){
-	return previewIndex;
->>>>>>> a8cfede1a0e4cc18b491dfc98aabbf24256cd863
+    return previewIndex;
 }
 
 int SpriteModel::getCurrentIndex(){
