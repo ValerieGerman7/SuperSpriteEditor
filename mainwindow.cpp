@@ -65,9 +65,9 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(previewPaneUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFrame()));
     connect(&model,&SpriteModel::currentFrameChanged, this, &MainWindow::nextFrame);
 
+    //Timeline
     timeline = new AnimationTimeline(ui->verticalLayout, model);
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
-    connect(timeline, &AnimationTimeline::getAnimation, &model, &SpriteModel::getAnimationSlot);
     connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 }
 

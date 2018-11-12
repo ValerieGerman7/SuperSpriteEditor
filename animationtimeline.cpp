@@ -1,11 +1,17 @@
 #include "animationtimeline.h"
 
+/**
+ * @brief AnimationTimeline::AnimationTimeline Sets up buttons corresponding to the frames
+ * of this sprite.
+ * @param layout The layout that holds the frame buttons
+ * @param model The model of this sprite editor
+ * @param parent
+ */
 AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QObject *parent)
     : timelineLayout(layout), model(&model)
 {
     //Set up the first frame
     QPushButton *frameButton = new QPushButton;
-    //frameButton->setText("1");
 
     frameButton->setFixedWidth(buttonSize);
     frameButton->setFixedHeight(buttonSize);
@@ -36,6 +42,9 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
 
 }
 
+/**
+ * @brief AnimationTimeline::~AnimationTimeline deletes buttons
+ */
 AnimationTimeline::~AnimationTimeline(){
     size_t numFrames = frameButtons.size();
     for(size_t i = 0; i < numFrames; i++){
@@ -43,8 +52,14 @@ AnimationTimeline::~AnimationTimeline(){
     }
 }
 
+/**
+ * @brief Adds a duplicate of the frame at the given index after that index.
+ * @param frameIndex
+ */
 void AnimationTimeline::duplicateFrame(int frameIndex){
-
+    SpriteFrame duplicate = model->getAnimation().getFrame(frameIndex);
+    //TODO: Copy contents of frame
+    insertNewFrame(duplicate, frameIndex+1);
 }
 
 /**
@@ -53,13 +68,21 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
  * @param newFrame
  */
 void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
+    size_t newFrameIndex = model->getAnimation().length();
+    insertNewFrame(newFrame, newFrameIndex);
+}
+
+/**
+ * @brief Inserts a new frame at the given position. This inserts the frame into the
+ * animation object held by the model, creates a new button and adds it to the timeline
+ * layout.
+ * @param newFrame: SpriteFrame to add
+ * @param newFrameIndex: index to add the frame to
+ */
+void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
     QPushButton *frameButton = new QPushButton;
-    //Numbering for testing
-    //frameButton->setText(QString::number(tempAddingCounter));
-    //tempAddingCounter++;
 
     //Add frame to animation
-    size_t newFrameIndex = model->getAnimation().length();
     model->getAnimation().insertFrame(newFrameIndex, newFrame);
 
     frameButton->setFixedWidth(buttonSize);
@@ -78,14 +101,17 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
 
     //Select new frame
     selectFrameButton(frameButton);
-
 }
 
 /**
  * @brief Remove the button corresponding to the index, and the frame from the animation.
+ * If there is only one frame left, that frame is not removed.
  * @param frameIndex
  */
 void AnimationTimeline::deleteFrame(int frameIndex){
+    if(frameButtons.size() <= 1 + numToolButtons){
+        return; //Never removes last frame
+    }
     QPushButton* remove = frameButtons.at(frameIndex);
     frameButtons.erase(frameButtons.begin() + frameIndex);
 
@@ -95,8 +121,19 @@ void AnimationTimeline::deleteFrame(int frameIndex){
     delete remove;
 }
 
-void AnimationTimeline::moveFrame(SpriteFrame frameToMove, int index){
+/**
+ * @brief Moves the frame at the given index to the new index.
+ * @param frameToMove
+ * @param newIndex
+ */
+void AnimationTimeline::moveFrame(int frameToMove, int newIndex){
+    //Remove
+    SpriteFrame frame = model->getFrame(frameToMove);
+    model->getAnimation().removeFrame(frameToMove);
+    deleteFrame(frameToMove);
 
+    //Reset
+    insertNewFrame(frame, newIndex);
 }
 
 /**
@@ -153,6 +190,27 @@ void AnimationTimeline::selectFrameButton(QPushButton* send){
     emit setSelectedFrame(index);
 }
 
+/**
+ * @brief Deletes old frames and corresponding buttons and sets new ones based
+ * on the animation object in the model. Selects the first frame in the animation.
+ * (Assumes there is always at least one frame in the animation).
+ */
 void AnimationTimeline::resetAnimationTimeline() {
-	// TODO: remove any existing buttons and recreate new ones using the current animation
+    //Delete old frames
+    int frameNum = frameButtons.size();
+    //Remove all except tool buttons
+    for(int i = 0; i < frameNum - numToolButtons; i++){
+        QPushButton* remove = frameButtons.at(0);
+        frameButtons.erase(frameButtons.begin());
+
+        timelineLayout->removeWidget(remove);
+    }
+    //Add all new frames
+    Animation ani = model->getAnimation();
+    for(int i = 0; i < ani.length(); i++){
+        addNewFrame(ani.getFrame(i));
+    }
+    selectedButton = frameButtons[0];
+    selectedButtonIndex = 0;
+    selectedButton->setEnabled(false);
 }

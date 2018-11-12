@@ -77,14 +77,7 @@ void SpriteModel::rotateCurrentFrameAntiClockWise() {
 void SpriteModel::createNewAnimation(int width, int height) {
 	auto animation = Animation(width, height);
 	setAnimation(animation);
-}
-
-/**
- * @brief Returns the animation object
- * @return
- */
-Animation& SpriteModel::getAnimationSlot(){
-    return animation;
+    emit animationChanged();
 }
 
 /**

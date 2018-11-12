@@ -48,11 +48,10 @@ public:
 
 signals:
     void currentFrameChanged();
-	void animationChanged();
+    void animationChanged();
 
 public slots:
     void setCurrentFrame(int);
-    Animation& getAnimationSlot();
 
 };
 

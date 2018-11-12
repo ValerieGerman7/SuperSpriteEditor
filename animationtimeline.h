@@ -21,9 +21,11 @@ public:
 
     void addNewFrame(SpriteFrame newFrame);
 
+    void insertNewFrame(SpriteFrame, int);
+
     void deleteFrame(int frameIndex);
 
-    void moveFrame(SpriteFrame frameToMove, int index);
+    void moveFrame(int frameToMove, int newIndex);
 
 	void resetAnimationTimeline();
 
@@ -33,12 +35,12 @@ private:
     SpriteModel* model;
 
     int buttonSize = 45;
+    int numToolButtons = 1;
 
     std::vector<QPushButton*> frameButtons;
 
     QPushButton* selectedButton;
     int selectedButtonIndex;
-    int tempAddingCounter = 0;
 
     void setButtonIcon(size_t index);
 
