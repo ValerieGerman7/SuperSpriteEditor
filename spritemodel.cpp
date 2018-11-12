@@ -17,6 +17,7 @@ Animation& SpriteModel::getAnimation() {
 void SpriteModel::setAnimation(Animation anim){
     animation = anim;
     currentIndex = 0;
+    previewIndex = 0;
     notifyOfFrameChange();
 	emit animationChanged();
 }
@@ -89,9 +90,14 @@ void SpriteModel::createNewAnimation(int width, int height) {
  * of the currently displayed sprite based on the boolean parameter.
  */
 int SpriteModel::getAndIncrementPreviewIndex(bool shouldIncrement){
-
     if(shouldIncrement){
-        previewIndex = ++previewIndex % (getAnimationLength() - 1);
+        int animationLength = getAnimationLength();
+        if(animationLength <= 1){
+            previewIndex = 0;
+            //Cannot mod zero
+            return previewIndex;
+        }
+        previewIndex = (++previewIndex) % (animationLength - 1);
         return previewIndex;
     }
     else{

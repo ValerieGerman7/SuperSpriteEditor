@@ -226,6 +226,7 @@ void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
  * @brief Deletes old frames and corresponding buttons and sets new ones based
  * on the animation object in the model. Selects the first frame in the animation.
  * (Assumes there is always at least one frame in the animation).
+ * This must be called after the animation object has been changed.
  */
 void AnimationTimeline::resetAnimationTimeline() {
     //Delete old frames
@@ -237,14 +238,25 @@ void AnimationTimeline::resetAnimationTimeline() {
 
         timelineLayout->removeWidget(remove);
     }
-    //Add all new frames
-    Animation ani = model->getAnimation();
-    for(int i = 0; i < ani.length(); i++){
-        addNewFrame(ani.getFrame(i));
-    }
-    selectedButton = frameButtons[0];
+    //Add first frame back
+    //First frame
+    //Set up the first frame (already existing in animation, so don't call insertFrame)
+    QPushButton *frameButton = new QPushButton;
+    frameButton->setFixedWidth(buttonSize);
+    frameButton->setFixedHeight(buttonSize);
+    frameButtons.push_back(frameButton);
+    setButtonIcon(0);
+    QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
+    timelineLayout->addWidget(frameButton, Qt::AlignTop);
+    frameButton->show();
+    selectedButton = frameButton;
     selectedButtonIndex = 0;
     selectedButton->setEnabled(false);
+
+    Animation ani = model->getAnimation();
+    for(int i = 1; i < ani.length(); i++){
+        addNewFrame(ani.getFrame(i));
+    }
 }
 
 /**
