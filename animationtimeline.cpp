@@ -12,8 +12,8 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
 {
     buttonIconSize = QSize(buttonSize, buttonSize);
 
+    //Set up the animation based on the model's animation object
     setupNewAnimation();
-std::cout<<"starting with animation of length " << this->model->getAnimation().length() <<std::endl;
 }
 
 /**
