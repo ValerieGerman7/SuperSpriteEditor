@@ -42,31 +42,44 @@ void AnimationTimeline::setupNewAnimation(){
     selectFrameDeletedSelection(frameButton);
 
     //Plus button tool
-    QPushButton *plusButton = new QPushButton;
-    plusButton->setText("+");
-    plusButton->setFixedHeight(buttonSize);
-    plusButton->setFixedWidth(buttonSize);
+    QPushButton *plusButton = toolButtonSetup("+");
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
-    timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
-    frameButtons.push_back(plusButton);
 
     //Remove button tool
-    QPushButton *removeButton = new QPushButton;
-    removeButton->setFixedHeight(buttonSize);
-    removeButton->setFixedWidth(buttonSize);
-    removeButton->setText("-");
+    QPushButton *removeButton = toolButtonSetup("-");
     QObject::connect(removeButton, &QPushButton::pressed,
                      this, &AnimationTimeline::removeSelectedFrame);
-    removeButton->show();
-    timelineLayout->addWidget(removeButton, 0, Qt::AlignTop);
-    frameButtons.push_back(removeButton);
+
+    //Duplicate tool
+    QPushButton *duplicateButton = toolButtonSetup("Duplicate");
+    QObject::connect(duplicateButton, &QPushButton::pressed,
+                     this, &AnimationTimeline::duplicateSelectedFrame);
 
     //Add any other frames this animation may have
     Animation ani = model->getAnimation();
     for(int i = 1; i < ani.length(); i++){
         addNewFrame(ani.getFrame(i));
     }
+}
+
+/**
+ * @brief AnimationTimeline::toolButtonSetup Sets up a tool button with the buttonSize
+ * settings, the given text and adds to the timelineLayout and frameButtons. pressed
+ * connections are not done here.
+ * @param buttonText
+ * @return
+ */
+QPushButton* AnimationTimeline::toolButtonSetup(QString buttonText){
+    QPushButton *toolButton = new QPushButton;
+    toolButton->setText(buttonText);
+    toolButton->setFixedHeight(buttonSize);
+    toolButton->setFixedWidth(buttonSize);
+    toolButton->show();
+
+    timelineLayout->addWidget(toolButton, 0, Qt::AlignTop);
+    frameButtons.push_back(toolButton);
+    return toolButton;
 }
 
 /**
@@ -87,6 +100,14 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
     SpriteFrame duplicate = model->getAnimation().getFrame(frameIndex);
     //TODO: Copy contents of frame
     insertNewFrame(duplicate, frameIndex+1);
+}
+
+/**
+ * @brief AnimationTimeline::duplicateSelectedFrame Duplicates the selected frame
+ * and inserts the duplicated frame after the selected frame's position.
+ */
+void AnimationTimeline::duplicateSelectedFrame(){
+    duplicateFrame(selectedButtonIndex);
 }
 
 /**
@@ -175,6 +196,10 @@ void AnimationTimeline::moveFrame(int frameToMove, int newIndex){
 
     //Reset
     insertNewFrame(frame, newIndex);
+}
+
+void AnimationTimeline::moveSelectedFrameUp(){
+
 }
 
 /**
