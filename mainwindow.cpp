@@ -269,7 +269,7 @@ void MainWindow::nextFrame(){
 	int index = model->incrementPreviewIndex();
 	SpriteFrame newPreviewPaneSprite = model->getFrame(index);
 
-    ui->previewPane->setPixmap(newPreviewPaneSprite.getPixMap());
+    ui->previewPane->setPixmap(newPreviewPaneSprite.getPixMap().scaled(ui->previewPane->size(), Qt::KeepAspectRatio, Qt::FastTransformation));
     ui->previewPane->repaint();
 
     if(animationPreviewWindow.isVisible()){
@@ -280,7 +280,7 @@ void MainWindow::nextFrame(){
 void MainWindow::updatePreviewPane(){
 	if(model->getCurrentIndex() == model->getPreviewIndex()){
 		SpriteFrame updatedPreviewPaneSprite = model->getFrame(model->getPreviewIndex());
-        ui->previewPane->setPixmap(updatedPreviewPaneSprite.getPixMap());
+        ui->previewPane->setPixmap(updatedPreviewPaneSprite.getPixMap().scaled(ui->previewPane->size(), Qt::KeepAspectRatio, Qt::FastTransformation));
         ui->previewPane->repaint();
     }
 }
