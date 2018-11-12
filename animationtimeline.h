@@ -53,6 +53,8 @@ public slots:
 
     void selectFrame();
 
+    void removeSelectedFrame();
+
 signals:
     void setSelectedFrame(int index);
     Animation getAnimation();

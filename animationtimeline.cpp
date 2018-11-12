@@ -29,16 +29,30 @@ AnimationTimeline::AnimationTimeline(QVBoxLayout* layout, SpriteModel& model, QO
     //Select new frame
     selectFrameButton(frameButton);
 
+    //Plus button tool
     QPushButton *plusButton = new QPushButton;
     plusButton->setText("+");
-    plusButton->setFixedHeight(30);
-    plusButton->setFixedWidth(30);
+    plusButton->setFixedHeight(buttonSize);
+    plusButton->setFixedWidth(buttonSize);
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
 
     timelineLayout->addWidget(plusButton, 0, Qt::AlignTop);
 
     frameButtons.push_back(plusButton);
+
+
+
+    //Remove button tool
+    QPushButton *removeButton = new QPushButton;
+    removeButton->setText("-");
+    removeButton->setFixedHeight(buttonSize);
+    removeButton->setFixedWidth(buttonSize);
+    QObject::connect(removeButton, &QPushButton::pressed,
+                     this, &AnimationTimeline::removeSelectedFrame);
+    removeButton->show();
+    timelineLayout->addWidget(removeButton, 0, Qt::AlignTop);
+    frameButtons.push_back(removeButton);
 
 }
 
@@ -213,4 +227,8 @@ void AnimationTimeline::resetAnimationTimeline() {
     selectedButton = frameButtons[0];
     selectedButtonIndex = 0;
     selectedButton->setEnabled(false);
+}
+
+void AnimationTimeline::removeSelectedFrame(){
+    std::cout<< "removeing selected" << std::endl;
 }
