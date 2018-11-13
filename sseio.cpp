@@ -51,7 +51,8 @@ void SSEIO::save(Animation& sprite, QString path) {
             for(int row = 0; row < SPRITE_HEIGHT; row++) {
                 for(int col = 0; col < SPRITE_WIDTH; col++) {
                     pixel = image.pixel(col,row);
-                    outfile << pixel.red() << ' ' << pixel.green() << ' ' << pixel.blue() << ' ' << pixel.alpha();
+                    int a = qAlpha(image.pixel(col,row));
+                    outfile << pixel.red() << ' ' << pixel.green() << ' ' << pixel.blue() << ' ' << a;
                     if(col == SPRITE_WIDTH - 1) {
                         outfile << std::endl;
                     }
