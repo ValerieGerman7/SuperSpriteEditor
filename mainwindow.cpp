@@ -304,3 +304,12 @@ void MainWindow::on_actionNew_triggered()
 }
 
 
+
+void MainWindow::on_actionDr_Henry_Killenger_triggered()
+{
+    Animation animation = Animation();
+    SpriteFrame newFrame;
+    newFrame.load("://drhenrykillinger");
+    animation.insertFrame(0, newFrame);
+    model->setAnimation(animation);
+}
