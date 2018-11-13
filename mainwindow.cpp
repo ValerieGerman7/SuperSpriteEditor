@@ -81,7 +81,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_previewAnimationButton_clicked()
 {
-    animationPreviewWindow.resize(model->getFrame(1).getPixMap().width() + 50, model->getFrame(1).getPixMap().height() + 50);
+    animationPreviewWindow.resize(model->getFrame(0).getPixMap().width() + 50, model->getFrame(0).getPixMap().height() + 50);
     animationPreviewWindow.show();
 }
 
@@ -289,7 +289,9 @@ void MainWindow::updatePreviewPane(){
 void MainWindow::on_previewFpsSlider_valueChanged(int value)
 {
     model->getAnimation().framesPerSecond = value;
-
+    QString fpsText = "FPS: ";
+    fpsText.append(QString::number(value));
+    ui->previewFpsLabel->setText(fpsText);
     if(value > 0) {
         previewPaneUpdateTimer->start(1000 / value);
     }

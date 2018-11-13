@@ -13,53 +13,11 @@
   <property name="windowTitle">
    <string>Full Size Animation</string>
   </property>
-  <widget class="QPushButton" name="closeButton">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>580</y>
-     <width>111</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </widget>
-  <widget class="QSlider" name="animationFpsSlider">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>530</y>
-     <width>160</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="animationFpsLabel">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>550</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>FPS</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="previewPane">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>-50</y>
+     <y>15</y>
      <width>512</width>
      <height>512</height>
     </rect>
@@ -72,6 +30,9 @@
    </property>
    <property name="scaledContents">
     <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
  </widget>
