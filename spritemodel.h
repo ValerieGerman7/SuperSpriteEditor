@@ -55,6 +55,8 @@ signals:
 public slots:
     void setCurrentFrame(int);
 
+    void resizeCurrentAnimation(int, int);
+
 };
 
 #endif // SPRITEMODEL_H

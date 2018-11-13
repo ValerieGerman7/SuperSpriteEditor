@@ -186,6 +186,16 @@
       </rect>
      </property>
     </widget>
+    <widget class="ResizeSpriteDialog" name="resizeSpriteDialog" native="true">
+     <property name="geometry">
+      <rect>
+       <x>29</x>
+       <y>39</y>
+       <width>401</width>
+       <height>321</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QScrollArea" name="timelineScrollArea">
     <property name="geometry">
@@ -811,7 +821,14 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string> </string>
+    </property>
+    <addaction name="actionDr_Henry_Killenger"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
@@ -845,6 +862,11 @@
     <string>New</string>
    </property>
   </action>
+  <action name="actionDr_Henry_Killenger">
+   <property name="text">
+    <string>Dr Henry Killenger</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -858,6 +880,12 @@
    <class>NewSpriteDialog</class>
    <extends>QWidget</extends>
    <header>newspritedialog.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ResizeSpriteDialog</class>
+   <extends>QWidget</extends>
+   <header>resizespritedialog.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

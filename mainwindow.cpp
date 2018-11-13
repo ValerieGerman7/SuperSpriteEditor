@@ -70,7 +70,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
     connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 
-
+    //Resize
+    connect(ui->resizeSpriteDialog, &ResizeSpriteDialog::resizeAnimation, &model, &SpriteModel::resizeCurrentAnimation);
 }
 
 MainWindow::~MainWindow()
@@ -306,3 +307,18 @@ void MainWindow::on_actionNew_triggered()
 }
 
 
+
+void MainWindow::on_actionDr_Henry_Killenger_triggered()
+{
+    Animation animation = Animation();
+    SpriteFrame newFrame;
+    newFrame.load("://drhenrykillinger");
+    animation.insertFrame(0, newFrame);
+    model->setAnimation(animation);
+
+}
+
+void MainWindow::on_resizeSpriteButton_clicked()
+{
+    ui->resizeSpriteDialog->show();
+}

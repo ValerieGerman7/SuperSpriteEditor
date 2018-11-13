@@ -4,10 +4,10 @@
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
     //Default size
-	animation = Animation();
-    SpriteFrame newFrame;
-    newFrame.load("://drhenrykillinger");
-    animation.insertFrame(0, newFrame);
+    animation = Animation(32,32);
+//    SpriteFrame newFrame;
+//    newFrame.load("://drhenrykillinger");
+//    animation.insertFrame(0, newFrame);
 }
 
 /**
@@ -118,4 +118,47 @@ int SpriteModel::getPreviewIndex(){
 
 int SpriteModel::getCurrentIndex(){
     return currentIndex;
+}
+
+/**
+ * @brief SpriteModel::resizeCurrentAnimation
+ * Does a direct copy of pixels from the old animation onto the new animation.
+ * Sets the copy boundaries at whichever animation size is smallest.
+ * @param width
+ * @param height
+ */
+void SpriteModel::resizeCurrentAnimation(int width, int height){
+    int frames = animation.length();
+    Animation resizedAnim = Animation(width, height);
+    resizedAnim.removeFrame(0);
+    int copyWidth;
+    int copyHeight;
+
+    if (width <= animation.getFrame(0).getImage().width()){
+        copyWidth = width;
+    }
+    else{
+        copyWidth = animation.getFrame(0).getImage().width();
+    }
+
+    if (height <= animation.getFrame(0).getImage().height()){
+        copyHeight = height;
+    }
+    else{
+        copyHeight = animation.getFrame(0).getImage().height();
+    }
+
+    for (int f = 0; f < frames; f++){
+        SpriteFrame resizedFrame = SpriteFrame(width, height);
+        QImage currentImage = animation.getFrame(f).getImage();
+        for (int w = 0; w < copyWidth; w++){
+            for (int h = 0; h < copyHeight; h++){
+                QRgb pixel = currentImage.pixel(w, h);
+                resizedFrame.getImage().setPixel(w, h, pixel);
+            }
+        }
+        resizedAnim.insertFrame(f, resizedFrame);
+    }
+
+    setAnimation(resizedAnim);
 }

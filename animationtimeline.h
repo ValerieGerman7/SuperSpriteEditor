@@ -39,11 +39,12 @@ private:
 
     //The size of the buttons in this timeline
     int buttonSize = 50;
+    int selectedButtonSize = 65;
     //Stores a QSize to set button icons
     QSize buttonIconSize;
 
     //The number of tool buttons
-    int numToolButtons = 4;
+    int numToolButtons = 1;
 
     //The button pointers corresponding to the frames and the
     //tool buttons
@@ -64,18 +65,18 @@ private:
 
     QPushButton* toolButtonSetup(QString);
 
+    void removeFrame(QPushButton*);
+
+    void duplicateFrame(QPushButton*);
+
+    void moveFrameDown(QPushButton*);
+
 public slots:
     void selectFrame();
-
-    void removeSelectedFrame();
 
 	void showContextMenu(QPoint);
 
     void addNewBlankFrame();
-
-    void duplicateSelectedFrame();
-
-    void moveSelectedFrameDown();
 
 signals:
     void setSelectedFrame(int index);
