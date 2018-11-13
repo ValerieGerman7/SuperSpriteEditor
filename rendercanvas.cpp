@@ -15,7 +15,7 @@ RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
 //    currentFrame().load("://drhenrykillinger");
 //	currentFrame().load("://images/black48p.png");
-	transparentBackground.load("://background");
+//	transparentBackground.load("://background");
 
 }
 
