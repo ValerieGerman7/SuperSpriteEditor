@@ -56,6 +56,7 @@ private slots:
 
     void on_actionDr_Henry_Killenger_triggered();
 
+    void on_resizeSpriteButton_clicked();
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;

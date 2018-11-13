@@ -186,6 +186,16 @@
       </rect>
      </property>
     </widget>
+    <widget class="ResizeSpriteDialog" name="resizeSpriteDialog" native="true">
+     <property name="geometry">
+      <rect>
+       <x>29</x>
+       <y>39</y>
+       <width>401</width>
+       <height>321</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QScrollArea" name="timelineScrollArea">
     <property name="geometry">
@@ -870,6 +880,12 @@
    <class>NewSpriteDialog</class>
    <extends>QWidget</extends>
    <header>newspritedialog.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ResizeSpriteDialog</class>
+   <extends>QWidget</extends>
+   <header>resizespritedialog.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -256,13 +256,15 @@ void AnimationTimeline::selectFrame(){
 void AnimationTimeline::selectFrameButton(QPushButton* send){
     //Refresh old selected button's icon
     setButtonIcon(selectedButtonIndex);
-    selectedButton->setEnabled(true);
+    selectedButton->setFixedHeight(buttonSize);
+    selectedButton->setFixedWidth(buttonSize);
 
     selectedButton = send;
 
     size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
     selectedButtonIndex = index;
-//    selectedButton->setEnabled(false);
+    selectedButton->setFixedHeight(selectedButtonSize);
+    selectedButton->setFixedWidth(selectedButtonSize);
 
     emit setSelectedFrame(index);
 }
@@ -276,7 +278,8 @@ void AnimationTimeline::selectFrameDeletedSelection(QPushButton* send){
 
     size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
     selectedButtonIndex = index;
-    selectedButton->setEnabled(false);
+    selectedButton->setFixedWidth(selectedButtonSize);
+    selectedButton->setFixedHeight(selectedButtonSize);
 
     emit setSelectedFrame(index);
 }
