@@ -4,10 +4,10 @@
 SpriteModel::SpriteModel(QObject *parent) : QObject(parent)
 {
     //Default size
-	animation = Animation();
-    SpriteFrame newFrame;
-    newFrame.load("://drhenrykillinger");
-    animation.insertFrame(0, newFrame);
+    animation = Animation(32,32);
+//    SpriteFrame newFrame;
+//    newFrame.load("://drhenrykillinger");
+//    animation.insertFrame(0, newFrame);
 }
 
 /**

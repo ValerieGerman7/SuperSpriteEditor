@@ -821,7 +821,14 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string> </string>
+    </property>
+    <addaction name="actionDr_Henry_Killenger"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
@@ -853,6 +860,11 @@
   <action name="actionNew">
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionDr_Henry_Killenger">
+   <property name="text">
+    <string>Dr Henry Killenger</string>
    </property>
   </action>
  </widget>
