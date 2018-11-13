@@ -36,7 +36,8 @@ SOURCES += \
     drawingtools.cpp \
     spritemodel.cpp \
     newspritedialog.cpp \
-    qrightclickbutton.cpp
+    qrightclickbutton.cpp \
+    resizespritedialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,12 +51,14 @@ HEADERS += \
     spritemodel.h \
     gif-h/gif.h \
     newspritedialog.h \
-    qrightclickbutton.h
+    qrightclickbutton.h \
+    resizespritedialog.h
 
 FORMS += \
         mainwindow.ui \
     animationpreviewwindow.ui \
-    newspritedialog.ui
+    newspritedialog.ui \
+    resizespritedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

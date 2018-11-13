@@ -12,7 +12,7 @@ Animation::Animation() {
  */
 Animation::Animation(int width,int height ) : width(width), height(height) {
 	auto newFrame = SpriteFrame(width,height);
-	insertFrame(0,newFrame);
+    insertFrame(0, newFrame);
 }
 
 /**
