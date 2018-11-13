@@ -15,7 +15,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     ui->setupUi(this);
     updateToolColor(rgb);
     previewPaneUpdateTimer = new QTimer(this);
-    previewPaneUpdateTimer->start(10000 / ui->previewFpsSlider->value());
+    previewPaneUpdateTimer->start(1000 / ui->previewFpsSlider->value());
 
     this->model = &model;
 
@@ -290,7 +290,7 @@ void MainWindow::on_previewFpsSlider_valueChanged(int value)
     model->getAnimation().framesPerSecond = value;
 
     if(value > 0) {
-        previewPaneUpdateTimer->start(10000 / value);
+        previewPaneUpdateTimer->start(1000 / value);
     }
     else {
       previewPaneUpdateTimer->stop();

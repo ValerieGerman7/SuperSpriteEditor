@@ -16,6 +16,7 @@ SpriteFrame::SpriteFrame() {
 SpriteFrame::SpriteFrame(int width, int height) {
 	// making a blank pixmap is easier than a qimage, so we'll do it in reverse this time
 	pixmap = QPixmap(width, height );
+	pixmap.fill(QColor(0, 0, 0, 0));
 	pixmapValid = true;
 	image = pixmap.toImage().convertToFormat(QImage::Format_ARGB32);
 
