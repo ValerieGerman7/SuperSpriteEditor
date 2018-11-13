@@ -39,6 +39,7 @@ private:
 
     //The size of the buttons in this timeline
     int buttonSize = 50;
+    int selectedButtonSize = 65;
     //Stores a QSize to set button icons
     QSize buttonIconSize;
 
