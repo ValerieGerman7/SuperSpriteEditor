@@ -120,6 +120,13 @@ int SpriteModel::getCurrentIndex(){
     return currentIndex;
 }
 
+/**
+ * @brief SpriteModel::resizeCurrentAnimation
+ * Does a direct copy of pixels from the old animation onto the new animation.
+ * Sets the copy boundaries at whichever animation size is smallest.
+ * @param width
+ * @param height
+ */
 void SpriteModel::resizeCurrentAnimation(int width, int height){
     int frames = animation.length();
     Animation resizedAnim = Animation(width, height);
