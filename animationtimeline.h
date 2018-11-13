@@ -43,7 +43,7 @@ private:
     QSize buttonIconSize;
 
     //The number of tool buttons
-    int numToolButtons = 2;
+    int numToolButtons = 4;
 
     //The button pointers corresponding to the frames and the
     //tool buttons
@@ -62,14 +62,20 @@ private:
 
     void selectFrameDeletedSelection(QPushButton*);
 
-public slots:
-    void addNewBlankFrame();
+    QPushButton* toolButtonSetup(QString);
 
+public slots:
     void selectFrame();
 
     void removeSelectedFrame();
 
 	void showContextMenu(QPoint);
+
+    void addNewBlankFrame();
+
+    void duplicateSelectedFrame();
+
+    void moveSelectedFrameDown();
 
 signals:
     void setSelectedFrame(int index);
