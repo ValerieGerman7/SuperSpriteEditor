@@ -15,7 +15,7 @@ RenderCanvas::RenderCanvas(QWidget *parent) : QWidget(parent) {
 
 //    currentFrame().load("://drhenrykillinger");
 //	currentFrame().load("://images/black48p.png");
-	transparentBackground.load("://background");
+//	transparentBackground.load("://background");
 
 }
 
@@ -114,10 +114,34 @@ void RenderCanvas::paintGreyWorkspace(QPainter& painter) {
  * Draws the checkered workspace background across the sprite area
  */
 void RenderCanvas::paintBackground(QPainter& painter) {
+    QSize canvasSize = this->size();
 
 	QSize scaledSize = getScaledImageSize();
+    QRect imageBounds = getImageBounds();
+    painter.fillRect(imageBounds, checkeredWorkspaceWhiteColor);
 
-	painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), transparentBackground);
+    float scaledCheckerSize = scaledInt(checkeredWorkspaceSize );
+
+    bool offset = true;
+    for( int x = 0; x < scaledSize.width(); x+= scaledCheckerSize ) {
+        for( int y = offset? 0: scaledCheckerSize;
+                y < scaledSize.height(); y+= scaledCheckerSize * 2 ) {
+            int width = scaledCheckerSize;
+            if (scaledSize.width() - x < scaledCheckerSize) {
+                width = scaledSize.width() - x;
+            }
+            int height = scaledCheckerSize;
+            if (scaledSize.height() - y < scaledCheckerSize) {
+                height = scaledSize.height() - y;
+            }
+            QRect checker(x + translation.x(),y + translation.y(),
+                          width,height);
+            painter.fillRect(checker, checkeredWorkspaceGreyColor);
+        }
+        offset = !offset;
+    }
+
+    //painter.drawPixmap(translation.x(), translation.y(), scaledSize.width(),  scaledSize.height(), transparentBackground);
 
 //	QSize canvasSize = this->size();
 

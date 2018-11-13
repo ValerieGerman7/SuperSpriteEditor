@@ -49,16 +49,22 @@ private:
 
 	const QColor backgroundColor = QColor(50,50,50);
 
+    const QColor checkeredWorkspaceWhiteColor = QColor(250,250,250);
+
+    const QColor checkeredWorkspaceGreyColor = QColor(200,200,200);
+
+    const float checkeredWorkspaceSize = 4;
+
 // Private members
 private:
 
     SpriteModel *model;
 
-	/**
-	 * @brief transparentBackground
-	 * A resource image that it uses to draw a checkered workspace background
-	 */
-	QPixmap transparentBackground;
+//	/**
+//	 * @brief transparentBackground
+//	 * A resource image that it uses to draw a checkered workspace background
+//	 */
+//	QPixmap transparentBackground;
 
 	/**
 	 * @brief scale
