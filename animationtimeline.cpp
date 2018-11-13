@@ -53,21 +53,6 @@ void AnimationTimeline::setupNewAnimation(){
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
 
-    //Remove button tool
-    QPushButton *removeButton = toolButtonSetup("-");
-    QObject::connect(removeButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::removeSelectedFrame);
-
-    //Move tool
-    QPushButton *moveButton = toolButtonSetup("->");
-    QObject::connect(moveButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::moveSelectedFrameDown);
-
-    //Duplicate tool
-    QPushButton *duplicateButton = toolButtonSetup("Xx");
-    QObject::connect(duplicateButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::duplicateSelectedFrame);
-
     //Add any other frames this animation may have
     Animation ani = model->getAnimation();
     for(int i = 1; i < ani.length(); i++){
@@ -115,11 +100,12 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
 }
 
 /**
- * @brief AnimationTimeline::duplicateSelectedFrame Duplicates the selected frame
- * and inserts the duplicated frame after the selected frame's position.
+ * @brief AnimationTimeline::duplicateSelectedFrame Duplicates the given frame
+ * and inserts the duplicated frame after the given frame's position.
  */
-void AnimationTimeline::duplicateSelectedFrame(){
-    duplicateFrame(selectedButtonIndex);
+void AnimationTimeline::duplicateFrame(QPushButton* button){
+    size_t index = find(frameButtons.begin(), frameButtons.end(), button) - frameButtons.begin();
+    duplicateFrame(index);
 }
 
 /**
@@ -221,8 +207,9 @@ void AnimationTimeline::moveFrame(int frameToMove, int newIndex){
  * @brief AnimationTimeline::moveSelectedFrameUp Moves the selected frame down (later
  * in animation) one position. Doesn't move if the frame would go out of range.
  */
-void AnimationTimeline::moveSelectedFrameDown(){
-    moveFrame(selectedButtonIndex, selectedButtonIndex+1);
+void AnimationTimeline::moveFrameDown(QPushButton* button){
+    size_t index = find(frameButtons.begin(), frameButtons.end(), button) - frameButtons.begin();
+    moveFrame(index, index+1);
 }
 
 /**
@@ -319,13 +306,13 @@ void AnimationTimeline::resetAnimationTimeline() {
  * @brief AnimationTimeline::removeSelectedFrame Removes the selected Frame. If the
  * selected frame is the last frame, nothing happens.
  */
-void AnimationTimeline::removeSelectedFrame(){
-    deleteFrame(selectedButtonIndex);
+void AnimationTimeline::removeFrame(QPushButton* button){
+    size_t index = find(frameButtons.begin(), frameButtons.end(), button) - frameButtons.begin();
+    deleteFrame(index);
 }
 
 void AnimationTimeline::showContextMenu( QPoint pos) // this is a slot
 {
-	std::cout << "context menu" << std::endl;
 	QRightClickButton* source = qobject_cast<QRightClickButton*>(sender());
 	// for most widgets
 	QPoint globalPos = source->mapToGlobal(pos);
@@ -333,14 +320,20 @@ void AnimationTimeline::showContextMenu( QPoint pos) // this is a slot
 	// QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
 
 	QMenu myMenu;
-	myMenu.addAction("Menu Item 1");
+    myMenu.addAction("Move Down");
+    myMenu.addAction("Duplicate");
+    myMenu.addAction("Remove Frame");
 
 	QAction* selectedItem = myMenu.exec(globalPos);
 	if (selectedItem) {
 		// something was chosen
-		if ( selectedItem->text() == "Menu Item 1" ) {
-			std::cout << "Menu Item 1" << std::endl;
-		}
+        if ( selectedItem->text() == "Move Down" ) {
+            moveFrameDown(source);
+        } else if(selectedItem->text() == "Duplicate"){
+            duplicateFrame(source);
+        } else if(selectedItem->text() == "Remove Frame"){
+            removeFrame(source);
+        }
 	}
 	else {
 		// nothing was chosen
