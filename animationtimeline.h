@@ -4,6 +4,7 @@
 #include "QPushButton"
 #include "animation.h"
 #include "spritemodel.h"
+#include "qrightclickbutton.h"
 #include <QObject>
 #include <QVBoxLayout>
 #include <iostream>
@@ -67,6 +68,8 @@ public slots:
     void selectFrame();
 
     void removeSelectedFrame();
+
+	void showContextMenu(QPoint);
 
 signals:
     void setSelectedFrame(int index);

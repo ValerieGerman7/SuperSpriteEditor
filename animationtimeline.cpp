@@ -1,4 +1,7 @@
 #include "animationtimeline.h"
+#include "qrightclickbutton.h"
+
+#include <QMenu>
 
 /**
  * @brief AnimationTimeline::AnimationTimeline Sets up buttons corresponding to the frames
@@ -28,13 +31,17 @@ void AnimationTimeline::setupNewAnimation(){
     frameButtons = std::vector<QPushButton*>();
 
     //Set up the first frame (already existing in animation, so don't call insertFrame)
-    QPushButton *frameButton = new QPushButton;
+	QRightClickButton *frameButton = new QRightClickButton;
     frameButton->setFixedWidth(buttonSize);
     frameButton->setFixedHeight(buttonSize);
+	QObject::connect(frameButton, &QRightClickButton::rightClicked,
+		this, &AnimationTimeline::showContextMenu);
+
     //Add new frame
     frameButtons.push_back(frameButton);
     //Set icon
     setButtonIcon(0);
+
     QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
     timelineLayout->addWidget(frameButton, Qt::AlignTop);
     frameButton->show();
@@ -107,7 +114,7 @@ void AnimationTimeline::addNewFrame(SpriteFrame newFrame){
  * @param newFrameIndex: index to add the frame to
  */
 void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
-    QPushButton *frameButton = new QPushButton;
+	QRightClickButton *frameButton = new QRightClickButton;
 
     //Add frame to animation
     model->getAnimation().insertFrame(newFrameIndex, newFrame);
@@ -121,7 +128,10 @@ void AnimationTimeline::insertNewFrame(SpriteFrame newFrame, int newFrameIndex){
     //Set in animation object
     setButtonIcon(newFrameIndex);
 
-    QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
+	QObject::connect(frameButton, &QPushButton::pressed, this, &AnimationTimeline::selectFrame);
+	QObject::connect(frameButton, &QRightClickButton::rightClicked,
+		this, &AnimationTimeline::showContextMenu);
+
 
     timelineLayout->insertWidget(newFrameIndex, frameButton, Qt::AlignTop);
     frameButton->show();
@@ -227,7 +237,7 @@ void AnimationTimeline::selectFrameButton(QPushButton* send){
 
     size_t index = find(frameButtons.begin(), frameButtons.end(), send) - frameButtons.begin();
     selectedButtonIndex = index;
-    selectedButton->setEnabled(false);
+//    selectedButton->setEnabled(false);
 
     emit setSelectedFrame(index);
 }
@@ -273,4 +283,28 @@ void AnimationTimeline::resetAnimationTimeline() {
  */
 void AnimationTimeline::removeSelectedFrame(){
     deleteFrame(selectedButtonIndex);
+}
+
+void AnimationTimeline::showContextMenu( QPoint pos) // this is a slot
+{
+	std::cout << "context menu" << std::endl;
+	QRightClickButton* source = qobject_cast<QRightClickButton*>(sender());
+	// for most widgets
+	QPoint globalPos = source->mapToGlobal(pos);
+	// for QAbstractScrollArea and derived classes you would use:
+	// QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
+
+	QMenu myMenu;
+	myMenu.addAction("Menu Item 1");
+
+	QAction* selectedItem = myMenu.exec(globalPos);
+	if (selectedItem) {
+		// something was chosen
+		if ( selectedItem->text() == "Menu Item 1" ) {
+			std::cout << "Menu Item 1" << std::endl;
+		}
+	}
+	else {
+		// nothing was chosen
+	}
 }

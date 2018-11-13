@@ -70,6 +70,7 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
     connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 
+
 }
 
 MainWindow::~MainWindow()

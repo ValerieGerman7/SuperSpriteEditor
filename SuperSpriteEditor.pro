@@ -35,7 +35,8 @@ SOURCES += \
     sseio.cpp \
     drawingtools.cpp \
     spritemodel.cpp \
-    newspritedialog.cpp
+    newspritedialog.cpp \
+    qrightclickbutton.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     drawingtools.h \
     spritemodel.h \
     gif-h/gif.h \
-    newspritedialog.h
+    newspritedialog.h \
+    qrightclickbutton.h
 
 FORMS += \
         mainwindow.ui \
