@@ -313,6 +313,9 @@ void MainWindow::on_actionDr_Henry_Killenger_triggered()
     newFrame.load("://drhenrykillinger");
     animation.insertFrame(0, newFrame);
     model->setAnimation(animation);
+
+}
+
 void MainWindow::on_resizeSpriteButton_clicked()
 {
     ui->resizeSpriteDialog->show();
