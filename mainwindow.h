@@ -54,6 +54,7 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_resizeSpriteButton_clicked();
 private:
     int rgb[3] = { 0 };
     int paletteCount = 0;

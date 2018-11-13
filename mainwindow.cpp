@@ -70,7 +70,8 @@ MainWindow::MainWindow(SpriteModel& model, QWidget *parent) :
     connect(timeline, &AnimationTimeline::setSelectedFrame, &model, &SpriteModel::setCurrentFrame);
     connect(&model, &SpriteModel::animationChanged, timeline, &AnimationTimeline::resetAnimationTimeline);
 
-
+    //Resize
+    connect(ui->resizeSpriteDialog, &ResizeSpriteDialog::resizeAnimation, &model, &SpriteModel::resizeCurrentAnimation);
 }
 
 MainWindow::~MainWindow()
@@ -303,4 +304,7 @@ void MainWindow::on_actionNew_triggered()
     ui->newSpriteDialog->show();
 }
 
-
+void MainWindow::on_resizeSpriteButton_clicked()
+{
+    ui->resizeSpriteDialog->show();
+}
