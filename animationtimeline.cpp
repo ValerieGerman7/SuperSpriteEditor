@@ -52,22 +52,7 @@ void AnimationTimeline::setupNewAnimation(){
     QPushButton *plusButton = toolButtonSetup("+");
     QObject::connect(plusButton, &QPushButton::pressed, this,
                      &AnimationTimeline::addNewBlankFrame);
-/*
-    //Remove button tool
-    QPushButton *removeButton = toolButtonSetup("-");
-    QObject::connect(removeButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::removeSelectedFrame);
 
-    //Move tool
-    QPushButton *moveButton = toolButtonSetup("->");
-    QObject::connect(moveButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::moveSelectedFrameDown);
-
-    //Duplicate tool
-    QPushButton *duplicateButton = toolButtonSetup("Xx");
-    QObject::connect(duplicateButton, &QPushButton::pressed,
-                     this, &AnimationTimeline::duplicateSelectedFrame);
-*/
     //Add any other frames this animation may have
     Animation ani = model->getAnimation();
     for(int i = 1; i < ani.length(); i++){
@@ -115,8 +100,8 @@ void AnimationTimeline::duplicateFrame(int frameIndex){
 }
 
 /**
- * @brief AnimationTimeline::duplicateSelectedFrame Duplicates the selected frame
- * and inserts the duplicated frame after the selected frame's position.
+ * @brief AnimationTimeline::duplicateSelectedFrame Duplicates the given frame
+ * and inserts the duplicated frame after the given frame's position.
  */
 void AnimationTimeline::duplicateFrame(QPushButton* button){
     size_t index = find(frameButtons.begin(), frameButtons.end(), button) - frameButtons.begin();
