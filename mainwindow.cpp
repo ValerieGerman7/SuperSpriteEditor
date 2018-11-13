@@ -81,6 +81,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_previewAnimationButton_clicked()
 {
+    animationPreviewWindow.resize(model->getFrame(1).getPixMap().width() + 50, model->getFrame(1).getPixMap().height() + 50);
     animationPreviewWindow.show();
 }
 
