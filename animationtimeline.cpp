@@ -51,8 +51,13 @@ void AnimationTimeline::setupNewAnimation(){
     QObject::connect(removeButton, &QPushButton::pressed,
                      this, &AnimationTimeline::removeSelectedFrame);
 
+    //Move tool
+    QPushButton *moveButton = toolButtonSetup("->");
+    QObject::connect(moveButton, &QPushButton::pressed,
+                     this, &AnimationTimeline::moveSelectedFrameDown);
+
     //Duplicate tool
-    QPushButton *duplicateButton = toolButtonSetup("Duplicate");
+    QPushButton *duplicateButton = toolButtonSetup("Xx");
     QObject::connect(duplicateButton, &QPushButton::pressed,
                      this, &AnimationTimeline::duplicateSelectedFrame);
 
@@ -189,17 +194,25 @@ void AnimationTimeline::deleteFrame(int frameIndex){
  * @param newIndex
  */
 void AnimationTimeline::moveFrame(int frameToMove, int newIndex){
+    //Return if either index is out of range
+    if(frameToMove < 0 || frameToMove >= (frameButtons.size() - numToolButtons) ||
+            newIndex < 0 || newIndex >= (frameButtons.size() - numToolButtons)){
+        return;
+    }
     //Remove
     SpriteFrame frame = model->getFrame(frameToMove);
-    model->getAnimation().removeFrame(frameToMove);
     deleteFrame(frameToMove);
 
     //Reset
     insertNewFrame(frame, newIndex);
 }
 
-void AnimationTimeline::moveSelectedFrameUp(){
-
+/**
+ * @brief AnimationTimeline::moveSelectedFrameUp Moves the selected frame down (later
+ * in animation) one position. Doesn't move if the frame would go out of range.
+ */
+void AnimationTimeline::moveSelectedFrameDown(){
+    moveFrame(selectedButtonIndex, selectedButtonIndex+1);
 }
 
 /**

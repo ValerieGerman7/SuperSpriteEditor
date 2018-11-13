@@ -42,7 +42,7 @@ private:
     QSize buttonIconSize;
 
     //The number of tool buttons
-    int numToolButtons = 3;
+    int numToolButtons = 4;
 
     //The button pointers corresponding to the frames and the
     //tool buttons
@@ -72,7 +72,7 @@ public slots:
 
     void duplicateSelectedFrame();
 
-    void moveSelectedFrameUp();
+    void moveSelectedFrameDown();
 
 signals:
     void setSelectedFrame(int index);
